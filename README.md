@@ -1,3 +1,12 @@
+# CPM Server Setup #
+
+- /etc/hosts catalogus-professorum auf locahost umleiten
+- VirtualHost in apache/nginx einrichten
+- OntoWiki Repo clonen
+- site/config.ini evtl anpassen
+- Modelle importieren
+
+
 # OntoWiki
 
 [![Build Status](http://owdev.ontowiki.net/job/OntoWiki/badge/icon)](http://owdev.ontowiki.net/job/OntoWiki/)
