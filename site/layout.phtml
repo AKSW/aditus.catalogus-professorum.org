@@ -88,8 +88,10 @@ $literalTemplate = basename($this->literal(array('property' => EF_RDF_NS . 'type
     	 $literalTemplate == "School" ) : ?>
         | <a id="rdform-edit-btn" href="#" data-resourceIri="<?= $this->resourceUri ?>" data-resourceTemplate="<?= $literalTemplate ?>"><?= $this->_('edit') ?></a>
         | <a id="rdform-new-btn" href="#" data-resourceTemplate="<?= $literalTemplate ?>" ><?= $this->_('new') ?></a>
-    <?php endif; ?>|
+    <?php endif; ?>
+	<!--|
     <?= $this->_('language') ?>: <a href="?lang=de">de</a>|<a href="?lang=hu">hu</a>
+	-->
 </div>
 
 
