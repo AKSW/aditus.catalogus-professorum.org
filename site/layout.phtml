@@ -13,124 +13,133 @@
 $owApp = OntoWiki::getInstance();
 
 // this is the standard template data
-$templateData   = $this->templateData;
+$templateData = $this->templateData;
 $title = $this->literal(array('uri' => $this->modelUri, 'property' => EF_RDFS_NS . 'label', 'plain' => true));
 $literalTemplate = basename($this->literal(array('property' => EF_RDF_NS . 'type', 'plain' => true)));
 ?><!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xmlns:dc="http://purl.org/dc/terms/" xmlns:foaf="http://xmlns.com/foaf/0.1/">
 <head>
-    <meta charset="UTF-8">
-    <title><?= $title . ': ' . $this->title ?></title>
+	<meta charset="UTF-8">
+	<title><?= $title . ': ' . $this->title ?></title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <meta name="generator" content="<?= $this->generator ?>" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta name="generator" content="<?= $this->generator ?>" />
 
-    <link rel="alternate" type="application/rdf+xml" href="<?= $this->resourceUri ?>.rdf" />
-    <link rel="pingback" href="<?= $this->pingbackUrl ?>" />
+	<link rel="alternate" type="application/rdf+xml" href="<?= $this->resourceUri ?>.rdf" />
+	<link rel="pingback" href="<?= $this->pingbackUrl ?>" />
 
-    <link rel="<?= $this->curie('http://xmlns.com/foaf/0.1/primaryTopic') ?>" href="<?= $this->resourceUri?>" />
-    <link type="text/css" href="<?= $this->baseUri ?>/css/bootstrap.css" rel="stylesheet" />
-    <link type="text/css" href="<?= $this->baseUri ?>/css/style.css" rel="stylesheet" />
-    <link type="text/css" href="<?php echo $owApp->extensionManager->getComponentUrl('rdform') . 'js/lib/rdform/css/rdform.css'; ?>" rel="stylesheet" />
-    <link type="text/css" href="<?php echo $owApp->extensionManager->getComponentUrl('rdform') . 'js/lib/rdform/css/smoothness/jquery-ui.custom.min.css'; ?>" rel="stylesheet" />
+	<link rel="<?= $this->curie('http://xmlns.com/foaf/0.1/primaryTopic') ?>" href="<?= $this->resourceUri?>" />
+	<link type="text/css" href="<?= $this->baseUri ?>/css/bootstrap.css" rel="stylesheet" />
+	<link type="text/css" href="<?= $this->baseUri ?>/css/style.css" rel="stylesheet" />
+	<link type="text/css" href="<?php echo $owApp->extensionManager->getComponentUrl('rdform') . 'js/lib/rdform/css/rdform.css'; ?>" rel="stylesheet" />
+	<link type="text/css" href="<?php echo $owApp->extensionManager->getComponentUrl('rdform') . 'js/lib/rdform/css/smoothness/jquery-ui.custom.min.css'; ?>" rel="stylesheet" />
 
-    <!-- jQuery -->
-    <script type="text/javascript" src="<?= $this->themeUrlBase ?>scripts/libraries/jquery.js"></script>
+	<!-- jQuery -->
+	<script type="text/javascript" src="<?= $this->themeUrlBase ?>scripts/libraries/jquery.js"></script>
 
-    <style type="text/css">
-      body {
-        padding-top: 20px;
-        padding-bottom: 40px;
-      }
-      @font-face{
-		font-family:'Glyphicons Halflings';
+	<style type="text/css">
+	@font-face{
+	font-family:'Glyphicons Halflings';
 		src:url(<?= $owApp->extensionManager->getComponentUrl('rdform') ?>public/fonts/glyphicons-halflings-regular.eot);
 		src:url(<?= $owApp->extensionManager->getComponentUrl('rdform') ?>public/fonts/glyphicons-halflings-regular.eot?#iefix) format('embedded-opentype'),url(<?= $owApp->extensionManager->getComponentUrl('rdform') ?>public/fonts/glyphicons-halflings-regular.woff) format('woff'),url(<?= $owApp->extensionManager->getComponentUrl('rdform') ?>public/fonts/glyphicons-halflings-regular.ttf) format('truetype'),url(<?= $owApp->extensionManager->getComponentUrl('rdform') ?>public/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular) format('svg')
-		}
-    </style>
+	}
+	</style>
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+	<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+	<!--[if lt IE 9]>
+	  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
 
-<?php
-    // includes the GA header script
-    // includes the exhibit header links
-    // other head scripts
-    $this->headScript();
-?>
+	<?php
+	// includes the GA header script, includes the exhibit header links, other head scripts
+	$this->headScript();
+	?>
 </head>
 
-<body<?php
-    foreach ($this->namespaces as $prefix => $ns): ?><?= ' xmlns:' . $prefix . '="' . $ns . '"' ?><?php endforeach; ?>>
-<div class="container">
-<h1><?= $title ?></h1>
-    <?php
-    $navResource = $this->templateOptions()->getValue('http://rdfs.org/ns/void#rootResource');
-    $navOptions = array(
-        'navResource' => $navResource,
-        //'navId' => 'nav-main',
-        'activeUrl' => $this->resourceUri,
-        'listClass' => 'list-inline',
-        //'navClass' => 'navbar'
-    );
-    ?>
-<div id="menu">
-    <?= $this->navigationList($navOptions) ?>
-    <a href="<?= $this->Url(array('uri' => $this->resourceUri, 'stayOnSite' => false)) ?>"><?= $this->_('backend') ?></a><!-- should always be displayed -->
-    <?php 
-    if ( $literalTemplate == "Person" || 
-    	 $literalTemplate == "Place" || 
-    	 $literalTemplate == "Position" ||
-    	 $literalTemplate == "School" ) : ?>
-        | <a id="rdform-edit-btn" href="#" data-resourceIri="<?= $this->resourceUri ?>" data-resourceTemplate="<?= $literalTemplate ?>"><?= $this->_('edit') ?></a>
-        | <a id="rdform-new-btn" href="#" data-resourceTemplate="<?= $literalTemplate ?>" ><?= $this->_('new') ?></a>
-    <?php endif; ?>
-	<!--|
-    <?= $this->_('language') ?>: <a href="?lang=de">de</a>|<a href="?lang=hu">hu</a>
-	-->
-</div>
+<body <?php foreach ($this->namespaces as $prefix => $ns): ?><?= ' xmlns:' . $prefix . '="' . $ns . '"' ?><?php endforeach; ?> >
 
+	<header class="header">
 
-    <?= $this->renderx($this->templateData); ?>
+		<div class="container"> 
 
-    <hr>
-    <footer>
-        <?php
-            $copy = $this->literal(array('uri' => $this->modelUri, 'property' => 'http://creativecommons.org/ns#attributionName'));
-            if ($copy != null) :
-        ?>
-        <p>&copy; <?= date('Y') . ' ' . $copy ?></p>
-        <?php endif ?>
-    </footer>
-</div> <!-- /container -->
+			<?php
+			$navResource = $this->templateOptions()->getValue('http://rdfs.org/ns/void#rootResource');
+			$navOptions = array(
+				'navResource' => $navResource,
+				//'navId' => 'nav-main',
+				'activeUrl' => $this->resourceUri,
+				'listClass' => 'list-inline',
+				//'navClass' => 'navbar'
+			);
+			?>
 
-<script type="text/javascript" src="<?php echo $this->baseUri ?>/js/jquery.js"></script>
-<script type="text/javascript" src="<?php echo $this->baseUri ?>/js/bootstrap.js"></script>
-<!-- include promise for IE compatibility -->
-<script type="text/javascript" src="//cdn.jsdelivr.net/g/es6-promise@1.0.0"></script>
+			<div class="nav menu main-menu pull-right">
+				<?= $this->navigationList($navOptions) ?>				
+			</div>
 
-<script type="text/javascript" src="<?php echo $owApp->extensionManager->getComponentUrl('rdform') . 'js/lib/jquery.jsonrpcclient.js/jquery.jsonrpcclient.js'; ?>"></script>
-<script type="text/javascript" src="<?php echo $owApp->extensionManager->getComponentUrl('rdform') . 'js/lib/jsonld.js/js/jsonld.js'; ?>"></script>
-<script type="text/javascript" src="<?php echo $owApp->extensionManager->getComponentUrl('rdform') . 'js/lib/rdform/js/jquery-ui.custom.min.js'; ?>"></script>
-<script type="text/javascript" src="<?php echo $owApp->extensionManager->getComponentUrl('rdform') . 'js/lib/rdform/js/rdform.js'; ?>"></script>
+			<h1 class="title"><?= $title ?></h1>
+			
+		</header>
+	</div>
 
-<script type="text/javascript" src="<?php echo $owApp->extensionManager->getComponentUrl('rdform') . 'js/jsonread.js'; ?>"></script>
-<script type="text/javascript" src="<?php echo $owApp->extensionManager->getComponentUrl('rdform') . 'js/owrdform.js'; ?>"></script>
+	<div class="container content-container">
 
-<script language="JavaScript">
-    var urlBase = '<?php echo $this->urlBase ?>';
-    var modelIri = '<?= $this->modelUri ?>';
-</script>
+		<div class="menu pull-right">
+			<a href="<?= $this->Url(array('uri' => $this->resourceUri, 'stayOnSite' => false)) ?>"><?= $this->_('backend') ?></a>
+				<?php 
+				if ( $literalTemplate == "Person" || $literalTemplate == "Professor" ) : ?>
+					| <a id="rdform-edit-btn" href="#" data-resourceIri="<?= $this->resourceUri ?>" data-resourceTemplate="<?= $literalTemplate ?>"><?= $this->_('edit') ?></a>
+					| <a id="rdform-new-btn" href="#" data-resourceTemplate="<?= $literalTemplate ?>" ><?= $this->_('new') ?></a>
+				<?php endif; ?>
+				<!--|
+				<?= $this->_('language') ?>: <a href="?lang=de">de</a>|<a href="?lang=hu">hu</a>
+				-->
+		</div>
 
-<script type="text/javascript" src="<?php echo $this->baseUri ?>/js/site.js"></script>
+		<div class="content">
+		<?php
+		// render content
+		echo $this->renderx($this->templateData); 
+		?>
+		</div>
+		
+	</div> <!-- /container -->	
+	
+	<footer class="footer">
+		<div class="container">
+		<br />
+			<?php
+			$copy = $this->literal(array('uri' => $this->modelUri, 'property' => 'http://creativecommons.org/ns#attributionName'));
+			if ($copy != null) : ?>
+				<p>&copy; <?= date('Y') . ' ' . $copy ?></p>
+			<?php endif ?>
+		</div>
+	</footer>
 
-<input type="hidden" id="urlBase" value="<?php echo $this->urlBase ?>" />
-<input type="hidden" id="modelIri" label="model" value="<?php echo $this->modelUri ?>" />
+	<script type="text/javascript" src="<?php echo $this->baseUri ?>/js/jquery.js"></script>
+	<script type="text/javascript" src="<?php echo $this->baseUri ?>/js/bootstrap.js"></script>
+	<!-- include promise for IE compatibility -->
+	<script type="text/javascript" src="//cdn.jsdelivr.net/g/es6-promise@1.0.0"></script>
+
+	<script type="text/javascript" src="<?php echo $owApp->extensionManager->getComponentUrl('rdform') . 'js/lib/jquery.jsonrpcclient.js/jquery.jsonrpcclient.js'; ?>"></script>
+	<script type="text/javascript" src="<?php echo $owApp->extensionManager->getComponentUrl('rdform') . 'js/lib/jsonld.js/js/jsonld.js'; ?>"></script>
+	<script type="text/javascript" src="<?php echo $owApp->extensionManager->getComponentUrl('rdform') . 'js/lib/rdform/js/jquery-ui.custom.min.js'; ?>"></script>
+	<script type="text/javascript" src="<?php echo $owApp->extensionManager->getComponentUrl('rdform') . 'js/lib/rdform/js/rdform.js'; ?>"></script>
+
+	<script type="text/javascript" src="<?php echo $owApp->extensionManager->getComponentUrl('rdform') . 'js/jsonread.js'; ?>"></script>
+	<script type="text/javascript" src="<?php echo $owApp->extensionManager->getComponentUrl('rdform') . 'js/owrdform.js'; ?>"></script>
+
+	<script language="JavaScript">
+		var urlBase = '<?php echo $this->urlBase ?>';
+		var modelIri = '<?= $this->modelUri ?>';
+	</script>
+
+	<script type="text/javascript" src="<?php echo $this->baseUri ?>/js/site.js"></script>
+
+	<input type="hidden" id="urlBase" value="<?php echo $this->urlBase ?>" />
+	<input type="hidden" id="modelIri" label="model" value="<?php echo $this->modelUri ?>" />
 
 </body>
 </html>
-

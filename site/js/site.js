@@ -4,7 +4,7 @@ var owCon = new OntoWikiConnection(urlBase + 'jsonrpc');
 // click edit btn
 $("#rdform-edit-btn").click(function() {
 		var container = $('<div class="rdform-container"></div>');
-		var template = "form_pfarrerbuch-" + $(this).attr("data-resourceTemplate") + ".html";
+		var template = "form_catalogus-professorum-" + $(this).attr("data-resourceTemplate") + ".html";
 		var resourceIri = $(this).attr("data-resourceIri");
 
 		$("body").append(container);
@@ -14,8 +14,8 @@ $("#rdform-edit-btn").click(function() {
 			var owRdform = new OntoWikiRDForm({
 				$container: container,
 				template: template,
-				hooks: "hooks_pfarrerbuch.js",
-				lang: "pfarrerbuch_de.js",
+				hooks: "owrdform_hooks.js",
+				lang: "de.js",
 				data: resData.data
 			});
 			owRdform.init( function(result){ 
@@ -23,11 +23,12 @@ $("#rdform-edit-btn").click(function() {
 					window.location.href = decodeURIComponent(result["@id"]);
 				});
 			});
+
 			owRdform.settings.$elem.data("resourceIri", resourceIri);
 			owRdform.settings.$elem.prepend('<div id="rdform-drag-header"></div>');
 			owRdform.settings.$elem.prepend('<p><button class="btn btn-default close-rdform-btn pull-right" alt="Close title="Close"><span class="glyphicon glyphicon-remove"></span></button></p>');
 			owRdform.settings.$elem.find(".rdform-submit-btn-group div").prepend('<button type="reset" class="btn btn-default close-rdform-btn">Abbrechen</button>  ');
-
+			window.scrollTo(0,0);
 			drag_init();	
 		});				
 		

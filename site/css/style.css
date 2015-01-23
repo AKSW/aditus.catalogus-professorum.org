@@ -2,26 +2,61 @@
     line-height: normal;
     box-sizing: border-box;
 }
+html, body {
+    margin: 0;
+    padding: 0;
+    
+    height:100%;
+    position: relative;
+}
 body, p {
     font-size: 13pt;
     line-height: normal;
 }
 
 h1 {
-    letter-spacing: 0.2em;
-    font-size: 24pt;
-    font-weight: bold;
+    //letter-spacing: 0.1em;
+    font-size: 24px;
+    //font-weight: bold;
     text-align: left;
 }
 
-.content {
-    text-align: justify;
+.header {
+    background: none repeat scroll 0% 0% #EBD9BE;
 }
 
-#menu {
+.title {
+    font-family: Georgia,serif;
+    color: #750000;
+}
+
+.content-container {
+    /*
+    position:relative;
+    height:auto !important;
+    height:100%;
+    min-height:100%;
+    */
+}
+.content {
+    padding-top: 20px;
+    text-align: justify;    
+}
+
+.menu {
     text-align: right;
     padding:    1em;
 }
+
+.footer {
+    background: none repeat scroll 0% 0% #EBD9BE;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    border-top: 1px solid lightGray;
+}
+
+
 .rdform-container {
     position: absolute;    
     background: white;
@@ -53,12 +88,14 @@ h1 {
 #rdform-drag-header:hover {
     /*cursor: move;*/
 }
+/*
 .rdform-edit-class-resource {
     display: none !important;
 }
 .rdform-class-group legend small {
     display: none;
 }
+*/
 .rdform-resource-group .rdform {
     margin-left: -35px;
     margin-top: 2px;

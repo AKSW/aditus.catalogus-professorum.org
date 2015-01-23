@@ -1,4 +1,122 @@
+person.phtml
+
 <?php
+$hasPeriod = 'PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>' . PHP_EOL;
+$hasPeriod.= 'PREFIX hp: <http://purl.org/voc/hp/>' . PHP_EOL;
+$hasPeriod.= 'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>' . PHP_EOL;
+$hasPeriod.= 'SELECT ?resourceUri' . PHP_EOL;
+$hasPeriod.= 'WHERE {' . PHP_EOL;
+$hasPeriod.= '  <' . $this->resourceUri . '> <http://catalogus-professorum.org/cpm/has-period> ?resourceUri .' . PHP_EOL;
+$hasPeriod.= '}' . PHP_EOL;
+
+//$this->querylist($hasPeriod, 'local/items/person.phtml', array(), array('prefix' => '<li>', 'suffix' => '</li>' ));
+
+//var_dump( $this->querylist($hasPeriod, 'local/items/resource.phtml') );
+
+?>
+
+<h2 class=""><?php echo $this->title ?></h2>
+
+<div class="">
+
+	<h3 class="">Lebensdaten</h3>
+
+
+
+</div>
+
+<?php // echo $this->resourceUri; ?>
+
+<?php
+
+//var_dump($this->literal(array('property' => 'http://catalogus-professorum.org/cpm/has-period')));
+
+?>
+
+<?php //echo $lastName = $this->literal(array('property' => 'http://catalogus-professorum.org/cpm/has-period')); ?>
+
+<?php
+/*
+$dob = $this->literal(array('property' => 'http://catalogus-professorum.org/cpm/has-period', 'tag' => 'span', 'node' => true));
+if ($dob) : ?>
+	* <?= $this->date($dob) ?>
+<?php endif; 
+*/
+
+/*
+SELECT DISTINCT * 
+WHERE {
+	?event <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/voc/hp/Event> ;
+	<http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> <"+_this.rdform.settings.data[0]["@id"]+"> ; 
+	<http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> <http://purl.org/voc/hp/hasPosition> ; 
+	<http://www.w3.org/1999/02/22-rdf-syntax-ns#object> <"+data[0]["@id"]+"> . 
+	OPTIONAL { 
+		?event <http://purl.org/voc/hp/start> ?start . 
+	} 
+	OPTIONAL { 
+		?event <http://purl.org/voc/hp/end> ?end . 
+	}
+}
+*/
+/*
+$birthQuery = 'SELECT *' . PHP_EOL;
+$birthQuery.= 'WHERE {' . PHP_EOL;
+$birthQuery.= ' <' . $this->resourceUri . '> <http://catalogus-professorum.org/cpm/has-period> ?resourceUri .' . PHP_EOL;
+$birthQuery.= ' ?resourceUri <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://catalogus-professorum.org/cpm/Birth> . ' . PHP_EOL;
+$birthQuery.= '  OPTIONAL {' . PHP_EOL;
+$birthQuery.= '      { ?resourceUri <http://catalogus-professorum.org/cpm/periodPlace> ?place . }' . PHP_EOL;
+$birthQuery.= '  }' . PHP_EOL;
+$birthQuery.= '  OPTIONAL {' . PHP_EOL;
+$birthQuery.= '      { ?resourceUri <http://catalogus-professorum.org/cpm/date> ?date . }' . PHP_EOL;
+$birthQuery.= '  }' . PHP_EOL;
+$birthQuery.= '}' . PHP_EOL;
+
+//var_dump( $this->querylist($birthQuery, 'local/items/resource.phtml') );
+$birthQuery = $this->querylist($birthQuery, 'local/items/parseObject.phtml');
+*/
+/*
+$birthQuery = $this->query(array(
+	'where' => '{'
+		. '<' . $this->resourceUri . '> <http://catalogus-professorum.org/cpm/has-period> ?resourceUri . '
+		. '?resourceUri <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://catalogus-professorum.org/cpm/Birth> . '
+	. '} ',
+	'template' => 'parseObject',
+));
+*/
+
+$birthQuery = 'SELECT *
+WHERE {
+	<' . $this->resourceUri . '> <http://catalogus-professorum.org/cpm/has-period> ?resourceUri .
+	?resourceUri <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://catalogus-professorum.org/cpm/Birth> .
+	OPTIONAL {
+		{ ?resourceUri <http://catalogus-professorum.org/cpm/periodPlace> ?place . }
+	}
+	OPTIONAL {
+		{ ?resourceUri <http://catalogus-professorum.org/cpm/date> ?date . }
+	}
+}';
+$birthQuery = $this->querylist($birthQuery, 'local/items/parseObject.phtml');
+
+if ( ! empty($birthQuery) ) {
+	$birthObj = json_decode($birthQuery);
+	$birthStr = "";
+
+	if ( property_exists($birthObj, "date") ) {
+		$birthStr .=  $birthObj->date ;
+	}
+	if ( property_exists($birthObj, "place") ) {
+		$birthStr .=  " in " . $birthObj->place ;
+	}
+	//var_dump($birth);
+
+	if ( $birthStr != "" ) {
+		echo "geboren " . $birthStr;
+	}
+}
+
+
+
+/*
 $staffingQuery = 'PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>' . PHP_EOL;
 $staffingQuery.= 'PREFIX hp: <http://purl.org/voc/hp/>' . PHP_EOL;
 $staffingQuery.= 'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>' . PHP_EOL;
@@ -63,6 +181,7 @@ $childQuery.= 'SELECT ?resourceUri' . PHP_EOL;
 $childQuery.= 'WHERE {' . PHP_EOL;
 $childQuery.= '  <' . $this->resourceUri . '> hp:child ?resourceUri .' . PHP_EOL;
 $childQuery.= '}' . PHP_EOL;
+
 ?>
 
 <div class="container row">
@@ -220,3 +339,7 @@ $childQuery.= '}' . PHP_EOL;
 
 <h4><?= $this->_('sources_literature') ?></h4>
 <?= $this->literals(array('property' => 'hp:source', 'tag' => 'div', 'class' => 'content')) ?>
+
+*/
+
+?>
