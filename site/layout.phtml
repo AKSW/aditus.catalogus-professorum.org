@@ -75,8 +75,23 @@ $literalTemplate = basename($this->literal(array('property' => EF_RDF_NS . 'type
 			);
 			?>
 
-			<div class="nav menu main-menu pull-right">
-				<?= $this->navigationList($navOptions) ?>				
+			<!--<form id="search" class="pull-right" action="#" method="get" role="search">
+	            <fieldset>
+	                <legend>Search</legend>
+	                <input type="text" id="searchterm" value="" />
+	                <button type="submit">Search</button>
+	            </fieldset>
+        	</form>-->
+
+        	<div class="pull-right">
+	        	<form class="search pull-right" action="./Suche.html" method="POST" role="search">
+	        		<input name="mode" type="hidden" value="person" />
+				    <input name="q" type="text" placeholder="Search Professor ..." />
+				</form>
+
+				<div class="nav menu main-menu">
+					<?= $this->navigationList($navOptions) ?>				
+				</div>			
 			</div>
 
 			<h1 class="title"><?= $title ?></h1>
@@ -90,8 +105,8 @@ $literalTemplate = basename($this->literal(array('property' => EF_RDF_NS . 'type
 			<a href="<?= $this->Url(array('uri' => $this->resourceUri, 'stayOnSite' => false)) ?>"><?= $this->_('backend') ?></a>
 				<?php 
 				if ( $literalTemplate == "Person" || $literalTemplate == "Professor" ) : ?>
-					| <a id="rdform-edit-btn" href="#" data-resourceIri="<?= $this->resourceUri ?>" data-resourceTemplate="<?= $literalTemplate ?>"><?= $this->_('edit') ?></a>
-					| <a id="rdform-new-btn" href="#" data-resourceTemplate="<?= $literalTemplate ?>" ><?= $this->_('new') ?></a>
+					| <a class="rdform-edit-btn" href="#"><?= $this->_('edit') ?></a>
+					| <a class="rdform-new-btn" href="#"><?= $this->_('new') ?></a>
 				<?php endif; ?>
 				<!--|
 				<?= $this->_('language') ?>: <a href="?lang=de">de</a>|<a href="?lang=hu">hu</a>
@@ -133,13 +148,17 @@ $literalTemplate = basename($this->literal(array('property' => EF_RDF_NS . 'type
 
 	<script language="JavaScript">
 		var urlBase = '<?php echo $this->urlBase ?>';
-		var modelIri = '<?= $this->modelUri ?>';
+		var modelIri = '<?php echo $this->modelUri ?>';
+		var resourceTemplate = '<?php echo $literalTemplate ?>';
+		var resourceUri = '<?php echo $this->resourceUri ?>';
 	</script>
 
 	<script type="text/javascript" src="<?php echo $this->baseUri ?>/js/site.js"></script>
+	<script type="text/javascript" src="<?php echo $this->baseUri ?>/js/search.js"></script>	
 
 	<input type="hidden" id="urlBase" value="<?php echo $this->urlBase ?>" />
-	<input type="hidden" id="modelIri" label="model" value="<?php echo $this->modelUri ?>" />
+	<input type="hidden" id="modelIri" value="<?php echo $this->modelUri ?>" />
+	<input type="hidden" id="resourceTemplate" value="<?php echo $literalTemplate ?>" />	
 
 </body>
 </html>

@@ -13,10 +13,11 @@ if (isset($_POST['mode'])) {
 
 <h3><?= $this->_('search_title') ?></h3>
 <form method="post">
-    <select name="mode">
+    <!--<select name="mode">
         <option value="person" <?= ($m=='person')?'selected':'' ?>><?= $this->_('search_person') ?></option>
         <option value="ort" <?= ($m=='ort')?'selected':'' ?>><?= $this->_('search_place') ?></option>
-    </select>
+    </select>-->
+    <input name="mode" type="hidden" value="person"/>
     <input name="q" type="text" value="<?= $searchText ?>"/>
     <input type="submit" value="<?= $this->_('search_search') ?>"/>
 </form>
@@ -25,14 +26,17 @@ if (isset($_POST['mode'])) {
 
 $query = new Erfurt_Sparql_Query2();
 $foafIri = new Erfurt_Sparql_Query2_IriRef('http://xmlns.com/foaf/0.1/');
+$cpmIri = new Erfurt_Sparql_Query2_IriRef('http://catalogus-professorum.org/cpm/');
 $hpIri = new Erfurt_Sparql_Query2_IriRef('http://purl.org/voc/hp/');
 $rdfsIri = new Erfurt_Sparql_Query2_IriRef('http://www.w3.org/2000/01/rdf-schema#');
 $foafPrefix = new Erfurt_Sparql_Query2_Prefix('foaf', $foafIri);
 $hpPrefix = new Erfurt_Sparql_Query2_Prefix('hp', $hpIri);
 $rdfsPrefix = new Erfurt_Sparql_Query2_Prefix('rdfs', $rdfsIri);
+$cpmPrefix = new Erfurt_Sparql_Query2_Prefix('cpm', $cpmIri);
 $query->addPrefix($foafPrefix);
 $query->addPrefix($hpPrefix);
 $query->addPrefix($rdfsPrefix);
+$query->addPrefix($cpmPrefix);
 
 $store = Erfurt_App::getInstance()->getStore();
 $resourceUriVar  = new Erfurt_Sparql_Query2_Var('resourceUri');
@@ -40,9 +44,10 @@ $resourceUriVar  = new Erfurt_Sparql_Query2_Var('resourceUri');
 $template = 'resource';
 
 if ($m == 'person') {
-    $nameRef  = new Erfurt_Sparql_Query2_IriRef('name', $foafPrefix);
+    //$nameRef  = new Erfurt_Sparql_Query2_IriRef('name', $foafPrefix);
+    $nameRef  = new Erfurt_Sparql_Query2_IriRef('label', $rdfsPrefix);
     $elements = $store->getSearchPatternWithNode($searchText, $nameRef);
-
+    /*
     $pVar  = new Erfurt_Sparql_Query2_IriRef('isPastor', $hpPrefix);
     $oVar  = new Erfurt_Sparql_Query2_Var('isPastor');
     $elements[] = new Erfurt_Sparql_Query2_Triple($resourceUriVar, $pVar, $oVar);
@@ -54,7 +59,10 @@ if ($m == 'person') {
             )
         )
     );
+    */
+    
 
+    /*
     // build optional for order by lastname
     $lastnameRef  = new Erfurt_Sparql_Query2_IriRef('lastName', $foafPrefix);
     $lastnameVar  = new Erfurt_Sparql_Query2_Var('lastname');
@@ -72,6 +80,9 @@ if ($m == 'person') {
     $query->addElements($elements);
     $query->getOrder()->add($lastnameVar);
     $query->getOrder()->add($firstnameVar);
+
+    */
+    $query->addElements($elements);
 
     $template = 'person';
 } else if ($m == 'ort') {
@@ -107,10 +118,10 @@ $query->setDistinct();
 
 ?>
 <?php if ($m !== null) : ?>
-    <span><?= sprintf($this->_('search_search_for'), $searchText) ?></span>
+    <p><?= sprintf($this->_('search_search_for'), $searchText) ?></p>
     <ul>
         <?= $this->querylist($query, 'local/items/' . $template . '.phtml', array(), array('prefix' => '<li>', 'suffix' => '</li>')) ?>
     </ul>
 <?php else: ?>
-    <span><?= $this->_('search_explanation') ?></span>
+    <p><?= $this->_('search_explanation') ?></p>
 <?php endif; ?>

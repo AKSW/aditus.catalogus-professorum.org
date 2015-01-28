@@ -1,0 +1,35 @@
+<?php
+
+$resourceUri = $this->resourceUri;
+$title = $this->title;
+$typeof = basename($this->classTypeof);
+
+/*
+switch ($typeof) {
+	case 'value':
+		# code...
+		break;
+	
+	default:
+		# code...
+		break;
+}
+*/
+
+echo "<h4>" . $title . "</h4>";
+
+if ( $typeof != "Birth" && $typeof != "Death" ) {
+
+	if ( isset($this->date) && ! empty($this->date) ) {
+		echo $this->date;
+	}
+	if ( isset($this->from) && ! empty($this->to) ) {
+		echo "von ".  $this->from;
+	}
+	if ( isset($this->to) && ! empty($this->to) ) {
+		echo " bis " . $this->to;
+	}
+}
+
+?><?php
+/* This PHP tag is only to absorb the UNIX-newline */
