@@ -62,6 +62,15 @@ h1 {
     border-top: 1px solid lightGray;
 }
 
+.loading {
+    background: url("../img/loader.gif") top left no-repeat;
+    min-height: 20px;
+    padding-left: 20px;
+}
+.loading:after {
+    content: "lädt...";
+}
+
 
 .rdform-container {
     position: absolute;    
@@ -94,14 +103,6 @@ h1 {
 #rdform-drag-header:hover {
     /*cursor: move;*/
 }
-/*
-.rdform-edit-class-resource {
-    display: none !important;
-}
-.rdform-class-group legend small {
-    display: none;
-}
-*/
 .rdform-resource-group .rdform {
     margin-left: -35px;
     margin-top: 2px;
