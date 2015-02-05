@@ -1,4 +1,44 @@
 <?php
+$prefixes = '
+@prefix cpm: <http://catalogus-professorum.org/cpm/> . \n
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . \n';
+
+$bornQuery = $prefixes . 'SELECT *
+WHERE {
+	?resourceUri <http://catalogus-professorum.org/cpm/has-period> ?period .
+	?period rdf:type <http://catalogus-professorum.org/cpm/Birth> .
+	?period <http://catalogus-professorum.org/cpm/periodPlace> <'.$this->resourceUri.'> .
+}';
+$born = $this->querylist( $bornQuery, 'local/items/liplain.phtml');
+
+$bodiesQuery = $prefixes . 'SELECT *
+WHERE {
+	?resourceUri <http://catalogus-professorum.org/cpm/bodyPlace> ?period .
+FILTER ( ?period = <'.$this->resourceUri.'> )
+}';
+$bodies = $this->querylist( $bodiesQuery, 'local/items/liplain.phtml');
+
+?>
+
+<h2 class=""><?php echo $this->title ?></h2>
+
+<?php if ( $born != "" ) { ?>
+	<div class="">
+		<h3 class="">In <?php echo $this->title ?> geborene Personen</h3>
+		<?php echo $born; ?>
+	</div>
+<?php } ?>
+
+<?php if ( $bodies != "" ) { ?>
+	<div class="">
+		<h3 class="">Körperschaften in <?php echo $this->title ?></h3>
+		<?php echo $bodies; ?>
+	</div>
+<?php } ?>
+
+
+<?php
+/*
 $positionQuery = 'PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>' . PHP_EOL;
 $positionQuery.= 'PREFIX hp: <http://purl.org/voc/hp/>' . PHP_EOL;
 $positionQuery.= 'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>' . PHP_EOL;
@@ -35,19 +75,6 @@ $schoolQuery.= '} ORDER BY ?bezeichnung' . PHP_EOL;
 <div class="col-md-4">
 
 <?php
-/**
- * This file is part of the {@link http://ontowiki.net OntoWiki} project.
- *
- * @copyright Copyright (c) 2012, {@link http://aksw.org AKSW}
- * @license http://opensource.org/licenses/gpl-license.php GNU General Public License (GPL)
- */
-
-/**
- * aksw.org feed template
- *
- * arranges the news feed for the resource
- */
-
 // prepare module options
 $map = trim($this->module('map', array('noChrome' => true)));
 ?>
@@ -74,3 +101,5 @@ $map = trim($this->module('map', array('noChrome' => true)));
 <!-- Beerdigt in … -->
 </div>
 </div>
+*/ 
+?>

@@ -15,7 +15,8 @@ $owApp = OntoWiki::getInstance();
 // this is the standard template data
 $templateData = $this->templateData;
 $title = $this->literal(array('uri' => $this->modelUri, 'property' => EF_RDFS_NS . 'label', 'plain' => true));
-$literalTemplate = basename($this->literal(array('property' => EF_RDF_NS . 'type', 'plain' => true)));
+// get the type of the class for rdform template
+$classTypeof = basename($this->literal(array('property' => EF_RDF_NS . 'type', 'plain' => true)));
 ?><!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xmlns:dc="http://purl.org/dc/terms/" xmlns:foaf="http://xmlns.com/foaf/0.1/">
 <head>
@@ -75,18 +76,10 @@ $literalTemplate = basename($this->literal(array('property' => EF_RDF_NS . 'type
 			);
 			?>
 
-			<!--<form id="search" class="pull-right" action="#" method="get" role="search">
-	            <fieldset>
-	                <legend>Search</legend>
-	                <input type="text" id="searchterm" value="" />
-	                <button type="submit">Search</button>
-	            </fieldset>
-        	</form>-->
-
-        	<div class="pull-right">
-	        	<form class="search pull-right" action="./Suche.html" method="POST" role="search">
+			<div class="pull-right">
+	        	<form class="search pull-right" action="<?php echo $this->urlBase ?>Katalog.html" method="POST" role="search">
 	        		<input name="mode" type="hidden" value="person" />
-				    <input name="q" type="text" placeholder="Search Professor ..." />
+				    <input name="q" class="search-field form-control" role="search" data-value="<?php if (isset($_POST['q'])) echo $_POST['q'] ?>" type="text" placeholder="Suche ..." />
 				</form>
 
 				<div class="nav menu main-menu">
@@ -96,15 +89,15 @@ $literalTemplate = basename($this->literal(array('property' => EF_RDF_NS . 'type
 
 			<h1 class="title"><?= $title ?></h1>
 			
-		</header>
-	</div>
+		</div>
+	</header>
 
 	<div class="container content-container">
 
 		<div class="menu pull-right">
 			<a href="<?= $this->Url(array('uri' => $this->resourceUri, 'stayOnSite' => false)) ?>"><?= $this->_('backend') ?></a>
 				<?php 
-				if ( $literalTemplate == "Person" || $literalTemplate == "Professor" ) : ?>
+				if ( $classTypeof != "SiteDocument" ) : ?>
 					| <a class="rdform-edit-btn" href="#"><?= $this->_('edit') ?></a>
 					| <a class="rdform-new-btn" href="#"><?= $this->_('new') ?></a>
 				<?php endif; ?>
@@ -123,12 +116,12 @@ $literalTemplate = basename($this->literal(array('property' => EF_RDF_NS . 'type
 	</div> <!-- /container -->	
 	
 	<footer class="footer">
-		<div class="container">
-		<br />
+		<div class="container content">
+			<p><small><?php echo $this->partial('local/lastchange.phtml', $this->lastchange($this->resourceUri)); ?></small></p>
 			<?php
 			$copy = $this->literal(array('uri' => $this->modelUri, 'property' => 'http://creativecommons.org/ns#attributionName'));
 			if ($copy != null) : ?>
-				<p>&copy; <?= date('Y') . ' ' . $copy ?></p>
+				<p><small>&copy; <?= date('Y') . ' ' . $copy ?></small></p>
 			<?php endif ?>
 		</div>
 	</footer>
@@ -137,6 +130,7 @@ $literalTemplate = basename($this->literal(array('property' => EF_RDF_NS . 'type
 	<script type="text/javascript" src="<?php echo $this->baseUri ?>/js/bootstrap.js"></script>
 	<!-- include promise for IE compatibility -->
 	<script type="text/javascript" src="//cdn.jsdelivr.net/g/es6-promise@1.0.0"></script>
+
 
 	<script type="text/javascript" src="<?php echo $owApp->extensionManager->getComponentUrl('rdform') . 'js/lib/jquery.jsonrpcclient.js/jquery.jsonrpcclient.js'; ?>"></script>
 	<script type="text/javascript" src="<?php echo $owApp->extensionManager->getComponentUrl('rdform') . 'js/lib/jsonld.js/js/jsonld.js'; ?>"></script>
@@ -149,17 +143,18 @@ $literalTemplate = basename($this->literal(array('property' => EF_RDF_NS . 'type
 	<script language="JavaScript">
 		var urlBase = '<?php echo $this->urlBase ?>';
 		var modelIri = '<?php echo $this->modelUri ?>';
-		var resourceTemplate = '<?php echo $literalTemplate ?>';
+		var resourceTemplate = '<?php echo $classTypeof ?>';
 		var resourceUri = '<?php echo $this->resourceUri ?>';
 	</script>
 
+	<script type="text/javascript" src="<?php echo $this->baseUri ?>/js/jquery.timeago.js" charset="utf-8"></script>
 	<script type="text/javascript" src="<?php echo $this->baseUri ?>/js/site.js"></script>
 	<script type="text/javascript" src="<?php echo $this->baseUri ?>/js/search.js"></script>
-	<script type="text/javascript" src="<?php echo $this->baseUri ?>/js/sparqlist.js"></script>
+	<script type="text/javascript" src="<?php echo $this->baseUri ?>/js/browser.js"></script>
 
 	<input type="hidden" id="urlBase" value="<?php echo $this->urlBase ?>" />
 	<input type="hidden" id="modelIri" value="<?php echo $this->modelUri ?>" />
-	<input type="hidden" id="resourceTemplate" value="<?php echo $literalTemplate ?>" />	
+	<input type="hidden" id="resourceTemplate" value="<?php echo $classTypeof ?>" />	
 
 </body>
 </html>

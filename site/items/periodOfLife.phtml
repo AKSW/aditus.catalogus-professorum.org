@@ -1,35 +1,59 @@
 <?php
 
 $resourceUri = $this->resourceUri;
-$title = $this->title;
 $typeof = basename($this->classTypeof);
 
-/*
-switch ($typeof) {
-	case 'value':
-		# code...
-		break;
+$title = $this->title;
+$content = "";
+
+if ( $typeof == "Birth" || $typeof == "Death" ) {
+
+	// Birth or Death
 	
-	default:
-		# code...
-		break;
-}
-*/
+} else { // Study, Carreer, Graduation ...	other Periods
 
-echo "<h4>" . $title . "</h4>";
-
-if ( $typeof != "Birth" && $typeof != "Death" ) {
-
+	$date = "";
+	
 	if ( isset($this->date) && ! empty($this->date) ) {
-		echo $this->date;
+		$date .= "Datum: " . $this->date;
 	}
 	if ( isset($this->from) && ! empty($this->to) ) {
-		echo "von ".  $this->from;
+		$date .= "von ".  $this->from;
 	}
 	if ( isset($this->to) && ! empty($this->to) ) {
-		echo " bis " . $this->to;
+		$date .= " bis " . $this->to;
 	}
+	if ( $date != "" ) {
+		$content .= "<p>" . $date . "</p>";
+	}	
+
+	if ( isset($this->periodBody) && ! empty($this->periodBody) ) {
+		$periodLabel = $this->literal(array('uri' => $this->periodBody, 'property' => 'rdfs:label', 'template' => 'resource'));
+		if ( $periodLabel == "" ) {
+			$periodLabel = basename($this->periodBody);
+		}
+		$content .= '<p>Körperschaft: <a href="'.$this->periodBody.'">'.$periodLabel.'</a></p>';
+	}
+
+	$title .= ' <small>('.$this->_($typeof).')</small>';
+
+	if ( isset($this->periodPlace) && ! empty($this->periodPlace) ) {
+		$content .= '<p>Ort: <a href="'.$this->periodPlace.'">'.basename($this->periodPlace).'</a></p>';
+	}
+
+	if ( isset($this->periodDocument) && ! empty($this->periodDocument) ) {
+		$documentLabel = ( isset($this->periodDocumentLabel) && ! empty($this->periodDocumentLabel) ) ? $this->periodDocumentLabel : basename($this->periodDocument);
+		$content .= '<p>Dokument: <a href="'.$this->periodDocument.'">'.$documentLabel.'</a></p>';
+	}
+	
 }
+
+if ( isset($this->periodNote) && ! empty($this->periodNote) ) {
+	$content .= '<p>Kommentar: ' . $this->periodNote . "</p>";
+}
+
+echo "<h4>" . $title . "</h4>";
+echo $content;
 
 ?><?php
 /* This PHP tag is only to absorb the UNIX-newline */
