@@ -1,6 +1,8 @@
 var owCon = new OntoWikiConnection(urlBase + 'jsonrpc');
 var urlBaseWebsafe = urlBase.replace(/[^a-z0-9-_.]/gi,'');
 
+console.log("TODO: \n-umstellung auf auditus.professorum... und definitio ... \n- make it ready for Bamberg");
+
 function createForm( owData ) {
 	var container = $('<div class="rdform-container"></div>');
 	var template = "form_" + urlBaseWebsafe + "." + resourceTemplate + ".html";
@@ -75,6 +77,43 @@ $("body").on("click", ".close-rdform-btn", function() {
 	return false;
 })
 
+$("input.search-field").on("focus", function() {
+
+	var queryEndpoint = "http://catalogus-professorum.org/sparql";	
+	var apitype = "sparql";
+	var queryDataType = "json";
+	var queryStr = "SELECT DISTINCT * FROM <http://catalogus-professorum.org/lipsiensium/> WHERE { ?item <http://www.w3.org/2000/01/rdf-schema#label> ?label. FILTER regex(?label,%s,'i')} ORDER BY ?label LIMIT 20";
+
+	$(this).autocomplete({
+		source: function( request, response ) {		
+			var query = queryStr.replace(/%s/g, "'" + request.term + "'");
+			$.ajax({
+				url: queryEndpoint,
+				dataType: queryDataType,
+				data: {
+					query: query,
+					format: "json"
+				},
+				success: function( data ) {
+					response( $.map( data.results.bindings, function( item ) {
+						return {
+							label: item.label.value, // wird angezeigt
+							value: item.item.value
+						}
+	            	}));
+	            },
+	            error: function(err) {
+	            	_this.showAlert( "error", 'Error on autocomplete: ' + JSON.stringify(err, null, ' ') );
+	            }
+			});
+	  	},
+	  	select : function( event, ui ) {
+	  		window.location.href = decodeURIComponent( ui.item.value );	
+	  	},
+		minLength: 2
+	});
+});
+
 // drag and drop functionality for the root form
 function drag_start(event) {
     var style = window.getComputedStyle(event.target, null);
@@ -108,4 +147,3 @@ function drag_init() {
 	document.body.addEventListener('dragover',drag_over,false); 
 	document.body.addEventListener('drop',drop,false);
 }
-
