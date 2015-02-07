@@ -1,10 +1,5 @@
 <a href="<?= htmlentities($this->resourceUri) ?>">
-	<?php 
-	/*
-    <?= $this->literal(array('uri' => $this->resourceUri, 'property' => 'foaf:lastName')); ?>,
-    <?= $this->literal(array('uri' => $this->resourceUri, 'property' => 'foaf:firstName')); ?>
-    */ ?>
-    <?= $this->literal(array('uri' => $this->resourceUri, 'property' => 'rdfs:label')); ?>
+	<?= $this->literal(array('uri' => $this->resourceUri, 'property' => 'rdfs:label')); ?>
 </a>
 <?php
 /* This PHP tag is only to absorb the UNIX-newline */

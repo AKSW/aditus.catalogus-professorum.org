@@ -1,19 +1,19 @@
 <?php
 $prefixes = '
-@prefix cpm: <http://catalogus-professorum.org/cpm/> . \n
+@prefix cpm: <' . $this->siteConfig['model'] . 'cpd/> . \n
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . \n';
 
 $bornQuery = $prefixes . 'SELECT *
 WHERE {
-	?resourceUri <http://catalogus-professorum.org/cpm/has-period> ?period .
-	?period rdf:type <http://catalogus-professorum.org/cpm/Birth> .
-	?period <http://catalogus-professorum.org/cpm/periodPlace> <'.$this->resourceUri.'> .
+	?resourceUri <' . $this->siteConfig['model'] . 'cpd/hasPeriod> ?period .
+	?period rdf:type <' . $this->siteConfig['model'] . 'cpd/Birth> .
+	?period <' . $this->siteConfig['model'] . 'cpd/periodPlace> <'.$this->resourceUri.'> .
 }';
 $born = $this->querylist( $bornQuery, 'local/items/liplain.phtml');
 
 $bodiesQuery = $prefixes . 'SELECT *
 WHERE {
-	?resourceUri <http://catalogus-professorum.org/cpm/bodyPlace> ?period .
+	?resourceUri <' . $this->siteConfig['model'] . 'cpd/bodyPlace> ?period .
 FILTER ( ?period = <'.$this->resourceUri.'> )
 }';
 $bodies = $this->querylist( $bodiesQuery, 'local/items/liplain.phtml');
@@ -35,71 +35,3 @@ $bodies = $this->querylist( $bodiesQuery, 'local/items/liplain.phtml');
 		<?php echo $bodies; ?>
 	</div>
 <?php } ?>
-
-
-<?php
-/*
-$positionQuery = 'PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>' . PHP_EOL;
-$positionQuery.= 'PREFIX hp: <http://purl.org/voc/hp/>' . PHP_EOL;
-$positionQuery.= 'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>' . PHP_EOL;
-$positionQuery.= 'SELECT DISTINCT ?resourceUri ?bezeichnung' . PHP_EOL;
-$positionQuery.= 'WHERE {' . PHP_EOL;
-$positionQuery.= '  ?resourceUri hp:place <' . $this->resourceUri . '> ;' . PHP_EOL;
-$positionQuery.= '               a hp:Position .' . PHP_EOL;
-$positionQuery.= '  {?resourceUri hp:positionDesignation ?bezeichnung }' . PHP_EOL;
-$positionQuery.= '  UNION {?resourceUri rdfs:label ?bezeichnung }' . PHP_EOL;
-$positionQuery.= '} ORDER BY ?bezeichnung' . PHP_EOL;
-
-$schoolQuery = 'PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>' . PHP_EOL;
-$schoolQuery.= 'PREFIX hp: <http://purl.org/voc/hp/>' . PHP_EOL;
-$schoolQuery.= 'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>' . PHP_EOL;
-$schoolQuery.= 'SELECT DISTINCT ?resourceUri ?bezeichnung' . PHP_EOL;
-$schoolQuery.= 'WHERE {' . PHP_EOL;
-$schoolQuery.= '  ?resourceUri hp:place <' . $this->resourceUri . '> ;' . PHP_EOL;
-$schoolQuery.= '             a hp:School .' . PHP_EOL;
-$schoolQuery.= '  {?resourceUri hp:nameOfSchool ?bezeichnung }' . PHP_EOL;
-$schoolQuery.= '  UNION {?resourceUri rdfs:label ?bezeichnung }' . PHP_EOL;
-$schoolQuery.= '} ORDER BY ?bezeichnung' . PHP_EOL;
-?>
-<div class="container row-fluid">
-<div class="col-md-8">
-<h3><?= $this->title ?></h3>
-
-<h4><?= $this->_('place_list_positions') ?></h4>
-<ul>
-<?= $this->querylist($positionQuery, 'local/items/resource.phtml', array('ort' => $this->title), array('prefix' => '<li>', 'suffix' => '</li>')) ?>
-</ul>
-
-</div>
-
-<div class="col-md-4">
-
-<?php
-// prepare module options
-$map = trim($this->module('map', array('noChrome' => true)));
-?>
-<img alt="Foto der Kirche" class="img-responsive img-thumbnail" src="<?= $this->wikiBaseUrl ?>site/img/kirche.png" />
-<hr/>
-<?php if (!empty($map)): ?>
-<?= $map; ?>
-<?php else: ?>
-<div class="alert alert-info">
-<?= $this->_('place_no_map_notice') ?>
-</div>
-<?php endif; ?>
-<hr/>
-<h5><?= $this->_('place_list_schools') ?></h5>
-<ul>
-<?= $this->querylist($schoolQuery, 'local/items/resource.phtml', array('ort' => $this->title), array('prefix' => '<li>', 'suffix' => '</li>')) ?>
-</ul>
-
-<!-- Personen Geboren in … -->
-
-<!-- Personen Gestorben in … -->
-
-<!-- Taufort … -->
-<!-- Beerdigt in … -->
-</div>
-</div>
-*/ 
-?>

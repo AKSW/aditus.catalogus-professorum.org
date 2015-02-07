@@ -4,7 +4,8 @@ List Professors with simple navigation and search
 (function( $ ) {
 	function Browser( elem ) {
 		this.$elem = $(elem);
-		this.browserClass = null;
+		this.settings = null;
+		this.selection = null;
 		this.offset = 0;
 		this.limit = 10;
 		this.list = [];
@@ -13,9 +14,14 @@ List Professors with simple navigation and search
 
 	Browser.prototype = {
 		init : function() {
-			var _this = this;
-			_this.printClassNavigation();
-			_this.printBrowser();
+			var _this = this;	
+			if ( _this.selection == null ) { // set init selection
+				for (var prop in _this.settings) {
+					_this.selection = prop;
+					break;
+				}				
+			}
+			_this.offset = 0;
 			_this.$elem.find(".panel-footer").addClass("loading");
 			_this.fetch(function(list) {
 				_this.list = list;
@@ -23,31 +29,31 @@ List Professors with simple navigation and search
 				_this.$elem.find(".panel-footer").removeClass("loading");
 
 				if ( $(".search-field").attr("data-value") != "" ) {
-					_this.$elem.find(".browser-search").val( $(".search-field").attr("data-value") ).trigger("keyup");
+					$(".browser-search").val( $(".search-field").attr("data-value") ).trigger("keyup");
 				} 
 			});
 		},
 
 		printClassNavigation : function() {
 			var _this = this;
-			var navElements = {
-				"Professoren & Personen" : ["http://catalogus-professorum.org/cpm/Person", "http://catalogus-professorum.org/cpm/Professor"],
-				"Körperschaften" : [ "http://catalogus-professorum.org/cpm/Body", "http://catalogus-professorum.org/cpm/Institution", "http://catalogus-professorum.org/cpm/Institute", "http://catalogus-professorum.org/cpm/Academy", "http://catalogus-professorum.org/cpm/Department", "http://catalogus-professorum.org/cpm/Faculty" ],
-				"Orte" : "http://ns.aksw.org/spatialHierarchy/City"
-			};
 			var navContainer = $('<ul class="browser-class-nav nav nav-tabs"></ul>');
-			$.each(navElements, function(label,uri) {
-				var element = $( '<li><a href="#" data-uri="'+uri+'">'+label+'</a></li>' );
-				if ( uri == ( _this.browserClass.join() ) ) {
-					$(element).addClass("active");
-				}
+			var i = 0;
+			$.each(_this.settings, function(label,classes) {
+				var element = $( '<li><a href="#" data-item="'+label+'">'+label+'</a></li>' );
 				$(navContainer).append( element );
 			});
 			_this.$elem.append( navContainer );
 
+			$(navContainer).children().first().addClass("active");
+
 			$(navContainer).find("a").click(function() {
-				$(".proflist").html("");
-				$(".proflist").Browser($(this).attr("data-uri").split(","));
+				$(this).parent().siblings().removeClass("active");
+				$(this).parent().addClass("active");
+				$(".browser-list").html("");
+				$(".browser-nav").html("");
+				$(".browser-counter").html("");
+				_this.selection = $(this).attr("data-item");				
+				_this.init();
 				return false;
 			});
 		},
@@ -71,14 +77,14 @@ List Professors with simple navigation and search
 		},
 		printPage : function(list) {
 			var _this = this;
-			var $list = _this.$elem.find(".browser-list").html("");
-			var $nav = _this.$elem.find(".browser-nav").html("");
-			var $counter = _this.$elem.find(".browser-counter").html("");
+			var $list = $(".browser-list").html("");
+			var $nav = $(".browser-nav").html("");
+			var $counter = $(".browser-counter").html("");
 			
 			for (var i = _this.offset; i < list.length; i++) {
 				if (i >= (_this.offset + _this.limit) ) { break; }
 				var label = (typeof list[i].label.value !== undefined) ? list[i].label.value : list[i].resourceUri.value.split("/").reverse()[0];
-				$list.append('<li class="browser-entry list-group-item"><a href="'+list[i].resourceUri.value+'">'+label+'</a></li>');
+				$list.append('<li class="browser-entry list-group-item"><a href="'+list[i].resourceUri.value+'">'+label+'</a></li>');				
 			};
 
 			if ( list.length == 0 ) {
@@ -120,18 +126,12 @@ List Professors with simple navigation and search
 
 		fetch : function(callback) {
 			var _this = this;
-			var filter = "?body = <" + _this.browserClass + ">";
-			if ( typeof _this.browserClass !== "string" ) {
-				filter = "?body = <" + _this.browserClass.join("> || ?body = <") + ">";
-			}
+			var filter = "?body = <" + _this.settings[_this.selection].join("> || ?body = <") + ">";
 
 			$.ajax({
 				url: urlBase + "sparql",
 				dataType: "json",
 				data: {
-					/*
-					query: "SELECT DISTINCT * WHERE { { ?class rdfs:subClassOf <"+_this.browserClass+"> . ?instance rdf:type ?class . } UNION { ?instance rdf:type <"+_this.browserClass+"> ; rdf:type ?class } OPTIONAL { ?instance rdfs:label ?label } } ORDER BY ?label ?instance",
-					*/
 					query: "SELECT DISTINCT * WHERE { ?resourceUri rdf:type ?body . OPTIONAL { ?resourceUri rdfs:label ?label . } FILTER ( "+filter+" ) } ORDER BY ?label ?resourceUri",
 					format: "json"
 				},
@@ -147,10 +147,12 @@ List Professors with simple navigation and search
 	};
 
 	
-	$.fn.Browser = function( browserClass ) {
+	$.fn.Browser = function( settings ) {
 		return this.each(function() {
 			var browser = new Browser( this );
-			browser.browserClass = browserClass;
+			browser.settings = settings;
+			browser.printClassNavigation();
+			browser.printBrowser();
 			browser.init();
 		});		
 	};

@@ -1,12 +1,12 @@
 <?php
 $prefixes = '
-@prefix cpm: <http://catalogus-professorum.org/cpm/> . \n
+@prefix cpm: <' . $this->siteConfig['model'] . 'cpd/> . \n
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . \n';
 
 $personsQuery = $prefixes . 'SELECT *
 WHERE {
-	?resourceUri <http://catalogus-professorum.org/cpm/has-period> ?period .
-	?period <http://catalogus-professorum.org/cpm/periodBody> <'.$this->resourceUri.'> .
+	?resourceUri <' . $this->siteConfig['model'] . 'cpd/hasPeriod> ?period .
+	?period <' . $this->siteConfig['model'] . 'cpd/periodBody> <'.$this->resourceUri.'> .
 }';
 $persons = $this->querylist( $personsQuery, 'local/items/liplain.phtml');
 ?>
@@ -14,7 +14,7 @@ $persons = $this->querylist( $personsQuery, 'local/items/liplain.phtml');
 <h2 class=""><?php echo $this->title ?></h2>
 
 <?php
-$bodyPlace = $this->query(array('where' => '<' . $this->resourceUri . '> <http://catalogus-professorum.org/cpm/bodyPlace> ?resourceUri', 'template' => 'resource'));
+$bodyPlace = $this->query(array('where' => '<' . $this->resourceUri . '> <' . $this->siteConfig['model'] . 'cpd/bodyPlace> ?resourceUri', 'template' => 'resource'));
 if ( $bodyPlace != "" ) { ?>
 	<p>Ort: <?php echo $bodyPlace; ?></p>
 <?php } ?>

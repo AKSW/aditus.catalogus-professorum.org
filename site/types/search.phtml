@@ -26,7 +26,7 @@ if (isset($_POST['mode'])) {
 
 $query = new Erfurt_Sparql_Query2();
 $foafIri = new Erfurt_Sparql_Query2_IriRef('http://xmlns.com/foaf/0.1/');
-$cpmIri = new Erfurt_Sparql_Query2_IriRef('http://catalogus-professorum.org/cpm/');
+$cpmIri = new Erfurt_Sparql_Query2_IriRef($this->siteConfig['model'] . 'cpd/');
 $hpIri = new Erfurt_Sparql_Query2_IriRef('http://purl.org/voc/hp/');
 $rdfsIri = new Erfurt_Sparql_Query2_IriRef('http://www.w3.org/2000/01/rdf-schema#');
 $foafPrefix = new Erfurt_Sparql_Query2_Prefix('foaf', $foafIri);

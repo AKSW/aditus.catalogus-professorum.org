@@ -2,26 +2,15 @@
 
 <?php
 $prefixes = '
-@prefix cpm: <http://catalogus-professorum.org/cpm/> . \n
+@prefix cpm: <' . $this->siteConfig['model'] . 'cpd/> . \n
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . \n';
 
-/*
-$resourceQuery = $prefixes . 'SELECT *
-WHERE {
-	<' . $this->resourceUri . '> ?p ?resourceUri .
-}';
-$resource = $this->querylist( $resourceQuery, 'local/items/parseObject.phtml');
-$resource = "[" . str_replace('}{', '},{', $resource) . "]";
-echo "<pre>";
-var_dump( json_decode($resource, true) );
-echo "</pre>";
-*/
 /*
 Birth & Death
 */
 $birthDeathQuery = $prefixes . 'SELECT *
 WHERE {
-	<' . $this->resourceUri . '> cpm:has-period ?resourceUri .
+	<' . $this->resourceUri . '> cpm:hasPeriod ?resourceUri .
 	{ ?resourceUri rdf:type cpm:Birth . }
 	UNION
 	{ ?resourceUri rdf:type cpm:Death . }
@@ -37,24 +26,24 @@ Family: Parents, Siblings, Spouse, Childs
 */
 // old explicite queries
 /*$parentsQuery = $prefixes . 'SELECT DISTINCT * WHERE {
-	<' . $this->resourceUri . '> cpm:has-period ?familyUri .
+	<' . $this->resourceUri . '> cpm:hasPeriod ?familyUri .
 	?familyUri cpm:familyParent ?resourceUri .
 	FILTER NOT EXISTS { ?familyUri cpm:familyParent <' . $this->resourceUri . '> . } }';
 */
 /*$siblingsQuery = $prefixes . 'SELECT DISTINCT * WHERE {
-	<' . $this->resourceUri . '> cpm:has-period ?familyUri .
+	<' . $this->resourceUri . '> cpm:hasPeriod ?familyUri .
 	?familyUri cpm:familyChild ?resourceUri .
 	FILTER ( ?resourceUri != <' . $this->resourceUri . '> )
 	FILTER EXISTS { ?familyUri cpm:familyChild <' . $this->resourceUri . '> . } }';
 */
 /*$spouseQuery = $prefixes . 'SELECT DISTINCT * WHERE {
-	<' . $this->resourceUri . '> cpm:has-period ?familyUri .
+	<' . $this->resourceUri . '> cpm:hasPeriod ?familyUri .
 	?familyUri cpm:familyParent ?resourceUri .
 	FILTER ( ?resourceUri != <' . $this->resourceUri . '> )
 	FILTER EXISTS { ?familyUri cpm:familyParent <' . $this->resourceUri . '> . } }';
 */
 /*$childsQuery = $prefixes . 'SELECT DISTINCT * WHERE {
-	<' . $this->resourceUri . '> cpm:has-period ?familyUri .
+	<' . $this->resourceUri . '> cpm:hasPeriod ?familyUri .
 	?familyUri cpm:familyChild ?resourceUri .
 	FILTER EXISTS { ?familyUri cpm:familyParent <' . $this->resourceUri . '> . } }';
 */
@@ -94,7 +83,7 @@ Periods of Life ()without Birth,Death,Family
 */
 $periodQuery = $prefixes . 'SELECT *
 WHERE {
-	<' . $this->resourceUri . '> cpm:has-period ?resourceUri .
+	<' . $this->resourceUri . '> cpm:hasPeriod ?resourceUri .
 	?resourceUri rdf:type ?classTypeof .
 	FILTER NOT EXISTS {  ?resourceUri rdf:type cpm:Birth . }
 	FILTER NOT EXISTS {  ?resourceUri rdf:type cpm:Death .  }
@@ -118,7 +107,7 @@ $periodObject = $this->querylist($periodQuery, 'local/items/periodOfLife.phtml')
 <h2 class=""><?php echo $this->title ?></h2>
 
 <?php 
-$denomination = $this->literal(array('property' => 'http://catalogus-professorum.org/cpm/denomination'));
+$denomination = $this->literal(array('property' => $this->siteConfig['model'] . 'cpd/denomination'));
 if ( $denomination != "" ) { ?>
 	<p>Konfession: <?php echo $denomination; ?></p>
 <?php } ?>
@@ -163,7 +152,7 @@ $furtherProperties = array(
 );
 
 foreach ($furtherProperties as $key => $value) {
-	$property = $this->query(array('where' => '<' . $this->resourceUri . '> <http://catalogus-professorum.org/cpm/'.$value.'> ?resourceUri', 'template' => 'liplain'));
+	$property = $this->query(array('where' => '<' . $this->resourceUri . '> <' . $this->siteConfig['model'] . 'cpd/'.$value.'> ?resourceUri', 'template' => 'liplain'));
 	if ( $property != "" ) {
 		echo "<h3>".$key."</h3>";
 		echo $property;

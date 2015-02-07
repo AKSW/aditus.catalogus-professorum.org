@@ -79,10 +79,10 @@ $("body").on("click", ".close-rdform-btn", function() {
 
 $("input.search-field").on("focus", function() {
 
-	var queryEndpoint = "http://catalogus-professorum.org/sparql";	
+	var queryEndpoint = urlBase + "sparql";	
 	var apitype = "sparql";
 	var queryDataType = "json";
-	var queryStr = "SELECT DISTINCT * FROM <http://catalogus-professorum.org/lipsiensium/> WHERE { ?item <http://www.w3.org/2000/01/rdf-schema#label> ?label. FILTER regex(?label,%s,'i')} ORDER BY ?label LIMIT 20";
+	var queryStr = "SELECT DISTINCT * WHERE { ?item <http://www.w3.org/2000/01/rdf-schema#label> ?label. FILTER regex(?label,%s,'i')} ORDER BY ?label LIMIT 20";
 
 	$(this).autocomplete({
 		source: function( request, response ) {		

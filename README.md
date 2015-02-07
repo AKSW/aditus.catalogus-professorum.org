@@ -1,4 +1,4 @@
-# CPM Server Setup #
+# Catalogus Professorum Aditus Setup #
 
 - /etc/hosts catalogus-professorum auf locahost umleiten
 - VirtualHost in apache/nginx einrichten
