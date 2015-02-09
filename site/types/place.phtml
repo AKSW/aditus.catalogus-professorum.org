@@ -1,19 +1,19 @@
 <?php
 $prefixes = '
-@prefix cpm: <' . $this->siteConfig['model'] . 'cpd/> . \n
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . \n';
+PREFIX cpd: <' . $this->namespaces["cpd"] . '>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> ';
 
 $bornQuery = $prefixes . 'SELECT *
 WHERE {
-	?resourceUri <' . $this->siteConfig['model'] . 'cpd/hasPeriod> ?period .
-	?period rdf:type <' . $this->siteConfig['model'] . 'cpd/Birth> .
-	?period <' . $this->siteConfig['model'] . 'cpd/periodPlace> <'.$this->resourceUri.'> .
+	?resourceUri <' . $this->namespaces["cpd"] . 'hasPeriod> ?period .
+	?period rdf:type <' . $this->namespaces["cpd"] . 'Birth> .
+	?period <' . $this->namespaces["cpd"] . 'periodPlace> <'.$this->resourceUri.'> .
 }';
 $born = $this->querylist( $bornQuery, 'local/items/liplain.phtml');
 
 $bodiesQuery = $prefixes . 'SELECT *
 WHERE {
-	?resourceUri <' . $this->siteConfig['model'] . 'cpd/bodyPlace> ?period .
+	?resourceUri <' . $this->namespaces["cpd"] . 'bodyPlace> ?period .
 FILTER ( ?period = <'.$this->resourceUri.'> )
 }';
 $bodies = $this->querylist( $bodiesQuery, 'local/items/liplain.phtml');

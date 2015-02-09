@@ -2,22 +2,23 @@
 
 <?php
 $prefixes = '
-@prefix cpm: <' . $this->siteConfig['model'] . 'cpd/> . \n
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . \n';
+PREFIX cpd: <' . $this->namespaces["cpd"] . '>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> ';
 
 /*
 Birth & Death
 */
 $birthDeathQuery = $prefixes . 'SELECT *
 WHERE {
-	<' . $this->resourceUri . '> cpm:hasPeriod ?resourceUri .
-	{ ?resourceUri rdf:type cpm:Birth . }
-	UNION
-	{ ?resourceUri rdf:type cpm:Death . }
+	<' . $this->resourceUri . '> cpd:hasPeriod ?resourceUri .
 	?resourceUri rdf:type ?classTypeof .
-	OPTIONAL { ?resourceUri cpm:periodPlace ?periodPlace . }
-	OPTIONAL { ?resourceUri cpm:date ?date . }
-	OPTIONAL { ?resourceUri cpm:periodNote ?periodNote . }
+	{ ?resourceUri rdf:type cpd:Birth . }
+	UNION
+	{ ?resourceUri rdf:type cpd:Death . }	
+	OPTIONAL { ?resourceUri cpd:periodPlace ?periodPlace . }
+	OPTIONAL { ?resourceUri cpd:date ?date . }
+	OPTIONAL { ?resourceUri cpd:periodNote ?periodNote . }
 }';
 $birthDeath = $this->querylist( $birthDeathQuery, 'local/items/periodOfLife.phtml');
 
@@ -26,47 +27,49 @@ Family: Parents, Siblings, Spouse, Childs
 */
 // old explicite queries
 /*$parentsQuery = $prefixes . 'SELECT DISTINCT * WHERE {
-	<' . $this->resourceUri . '> cpm:hasPeriod ?familyUri .
-	?familyUri cpm:familyParent ?resourceUri .
-	FILTER NOT EXISTS { ?familyUri cpm:familyParent <' . $this->resourceUri . '> . } }';
+	<' . $this->resourceUri . '> cpd:hasPeriod ?familyUri .
+	?familyUri cpd:familyParent ?resourceUri .
+	FILTER NOT EXISTS { ?familyUri cpd:familyParent <' . $this->resourceUri . '> . } }';
 */
 /*$siblingsQuery = $prefixes . 'SELECT DISTINCT * WHERE {
-	<' . $this->resourceUri . '> cpm:hasPeriod ?familyUri .
-	?familyUri cpm:familyChild ?resourceUri .
+	<' . $this->resourceUri . '> cpd:hasPeriod ?familyUri .
+	?familyUri cpd:familyChild ?resourceUri .
 	FILTER ( ?resourceUri != <' . $this->resourceUri . '> )
-	FILTER EXISTS { ?familyUri cpm:familyChild <' . $this->resourceUri . '> . } }';
+	FILTER EXISTS { ?familyUri cpd:familyChild <' . $this->resourceUri . '> . } }';
 */
 /*$spouseQuery = $prefixes . 'SELECT DISTINCT * WHERE {
-	<' . $this->resourceUri . '> cpm:hasPeriod ?familyUri .
-	?familyUri cpm:familyParent ?resourceUri .
+	<' . $this->resourceUri . '> cpd:hasPeriod ?familyUri .
+	?familyUri cpd:familyParent ?resourceUri .
 	FILTER ( ?resourceUri != <' . $this->resourceUri . '> )
-	FILTER EXISTS { ?familyUri cpm:familyParent <' . $this->resourceUri . '> . } }';
+	FILTER EXISTS { ?familyUri cpd:familyParent <' . $this->resourceUri . '> . } }';
 */
 /*$childsQuery = $prefixes . 'SELECT DISTINCT * WHERE {
-	<' . $this->resourceUri . '> cpm:hasPeriod ?familyUri .
-	?familyUri cpm:familyChild ?resourceUri .
-	FILTER EXISTS { ?familyUri cpm:familyParent <' . $this->resourceUri . '> . } }';
+	<' . $this->resourceUri . '> cpd:hasPeriod ?familyUri .
+	?familyUri cpd:familyChild ?resourceUri .
+	FILTER EXISTS { ?familyUri cpd:familyParent <' . $this->resourceUri . '> . } }';
 */
 	// new implicite queries
 $parentsQuery = $prefixes . 'SELECT DISTINCT * WHERE { 
-	?familyUri rdf:type cpm:Family ;
-		cpm:familyChild ?child ;
-		cpm:familyParent ?resourceUri .
+	?familyUri rdf:type cpd:Family ;
+		cpd:familyChild ?child ;
+		cpd:familyParent ?resourceUri .
 	FILTER ( ?child = <'.$this->resourceUri.'> ) }';
 $siblingsQuery = $prefixes . 'SELECT DISTINCT * WHERE {
-	?familyUri rdf:type cpm:Family ;
-		cpm:familyChild ?resourceUri .
-	FILTER ( ?resourceUri != <'.$this->resourceUri.'> )
-	FILTER EXISTS { ?familyUri cpm:familyChild <' . $this->resourceUri . '> . } }';
+	?familyUri rdf:type cpd:Family ;
+		cpd:familyChild ?resourceUri ;
+		cpd:familyChild <' . $this->resourceUri . '> .
+	FILTER ( ?resourceUri != <'.$this->resourceUri.'> ) }';
+	//FILTER EXISTS { ?familyUri cpd:familyChild <' . $this->resourceUri . '> } }';
 $spouseQuery = $prefixes . 'SELECT DISTINCT * WHERE {
-	?familyUri rdf:type cpm:Family ;
-		cpm:familyParent ?resourceUri .
-	FILTER ( ?resourceUri != <'.$this->resourceUri.'> )
-	FILTER EXISTS { ?familyUri cpm:familyParent <' . $this->resourceUri . '> . } }';
+	?familyUri rdf:type cpd:Family ;
+		cpd:familyParent ?resourceUri ;
+		cpd:familyParent <' . $this->resourceUri . '> .
+	FILTER ( ?resourceUri != <'.$this->resourceUri.'> ) }';
+	//FILTER EXISTS { ?familyUri cpd:familyParent <' . $this->resourceUri . '> . } }';
 $childsQuery = $prefixes . 'SELECT DISTINCT * WHERE { 
-	?familyUri rdf:type cpm:Family ;
-		cpm:familyChild ?resourceUri ;
-		cpm:familyParent ?parent .
+	?familyUri rdf:type cpd:Family ;
+		cpd:familyChild ?resourceUri ;
+		cpd:familyParent ?parent .
 	FILTER ( ?parent = <'.$this->resourceUri.'> ) }';
 
 $family = array( 
@@ -83,31 +86,32 @@ Periods of Life ()without Birth,Death,Family
 */
 $periodQuery = $prefixes . 'SELECT *
 WHERE {
-	<' . $this->resourceUri . '> cpm:hasPeriod ?resourceUri .
-	?resourceUri rdf:type ?classTypeof .
-	FILTER NOT EXISTS {  ?resourceUri rdf:type cpm:Birth . }
-	FILTER NOT EXISTS {  ?resourceUri rdf:type cpm:Death .  }
-	FILTER NOT EXISTS {  ?resourceUri rdf:type cpm:Family .  }
-	OPTIONAL { ?resourceUri cpm:periodPlace ?periodPlace . }
-	OPTIONAL { ?resourceUri cpm:periodBody ?periodBody . }
-	OPTIONAL { ?resourceUri cpm:date ?date . }
-	OPTIONAL { ?resourceUri cpm:from ?from . }
-	OPTIONAL { ?resourceUri cpm:to ?to . }
-	OPTIONAL { ?resourceUri cpm:periodNote ?periodNote . }
+	<' . $this->resourceUri . '> cpd:hasPeriod ?resourceUri .
+	?resourceUri rdf:type ?classTypeof .	
+	OPTIONAL { ?resourceUri cpd:periodPlace ?periodPlace . }
+	OPTIONAL { ?resourceUri cpd:periodBody ?periodBody . }
+	OPTIONAL { ?resourceUri cpd:date ?date . }
+	OPTIONAL { ?resourceUri cpd:from ?from . }
+	OPTIONAL { ?resourceUri cpd:to ?to . }
+	OPTIONAL { ?resourceUri cpd:periodNote ?periodNote . }
 	OPTIONAL { 
-		?resourceUri cpm:periodDocument ?periodDocument . 
+		?resourceUri cpd:periodDocument ?periodDocument . 
 		OPTIONAL {
 			?periodDocument rdfs:label ?periodDocumentLabel .
 		}
 	}
+	FILTER ( ?classTypeof != cpd:Birth && ?classTypeof != cpd:Death && ?classTypeof != cpd:Family )
 } ORDER BY ASC(?date) ASC(?from)';
+	//FILTER NOT EXISTS {  ?resourceUri rdf:type cpd:Birth . }
+	//FILTER NOT EXISTS {  ?resourceUri rdf:type cpd:Death .  }
+	//FILTER NOT EXISTS {  ?resourceUri rdf:type cpd:Family .  }
 $periodObject = $this->querylist($periodQuery, 'local/items/periodOfLife.phtml');
 ?>
 
 <h2 class=""><?php echo $this->title ?></h2>
 
 <?php 
-$denomination = $this->literal(array('property' => $this->siteConfig['model'] . 'cpd/denomination'));
+$denomination = $this->literal(array('property' => $this->namespaces["cpd"] . 'denomination'));
 if ( $denomination != "" ) { ?>
 	<p>Konfession: <?php echo $denomination; ?></p>
 <?php } ?>
@@ -152,7 +156,7 @@ $furtherProperties = array(
 );
 
 foreach ($furtherProperties as $key => $value) {
-	$property = $this->query(array('where' => '<' . $this->resourceUri . '> <' . $this->siteConfig['model'] . 'cpd/'.$value.'> ?resourceUri', 'template' => 'liplain'));
+	$property = $this->query(array('where' => '<' . $this->resourceUri . '> <' . $this->namespaces["cpd"] . $value.'> ?resourceUri', 'template' => 'liplain'));
 	if ( $property != "" ) {
 		echo "<h3>".$key."</h3>";
 		echo $property;

@@ -1,8 +1,9 @@
 var owCon = new OntoWikiConnection(urlBase + 'jsonrpc');
 var urlBaseWebsafe = urlBase.replace(/[^a-z0-9-_.]/gi,'');
 
-console.log("TODO: \n-umstellung auf auditus.professorum... und definitio ... \n- make it ready for Bamberg");
-
+/*
+New RDForm
+*/
 function createForm( owData ) {
 	var container = $('<div class="rdform-container"></div>');
 	var template = "form_" + urlBaseWebsafe + "." + resourceTemplate + ".html";
@@ -77,8 +78,10 @@ $("body").on("click", ".close-rdform-btn", function() {
 	return false;
 })
 
+/*
+Autocomplete Search
+*/
 $("input.search-field").on("focus", function() {
-
 	var queryEndpoint = urlBase + "sparql";	
 	var apitype = "sparql";
 	var queryDataType = "json";

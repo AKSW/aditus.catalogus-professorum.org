@@ -9,6 +9,7 @@ List Professors with simple navigation and search
 		this.offset = 0;
 		this.limit = 10;
 		this.list = [];
+		this.prefixes = 'PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n';
 		return this;
 	}
 
@@ -126,13 +127,13 @@ List Professors with simple navigation and search
 
 		fetch : function(callback) {
 			var _this = this;
-			var filter = "?body = <" + _this.settings[_this.selection].join("> || ?body = <") + ">";
+			var filter = "?body = <" + _this.settings[_this.selection].join("> || ?body = <") + ">";			
 
 			$.ajax({
 				url: urlBase + "sparql",
 				dataType: "json",
 				data: {
-					query: "SELECT DISTINCT * WHERE { ?resourceUri rdf:type ?body . OPTIONAL { ?resourceUri rdfs:label ?label . } FILTER ( "+filter+" ) } ORDER BY ?label ?resourceUri",
+					query: _this.prefixes + "SELECT DISTINCT * WHERE { ?resourceUri rdf:type ?body . OPTIONAL { ?resourceUri rdfs:label ?label . } FILTER ( "+filter+" ) } ORDER BY ?label ?resourceUri",
 					format: "json"
 				},
 				success: function( data ) {
