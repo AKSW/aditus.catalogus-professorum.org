@@ -11,6 +11,14 @@ WHERE {
 }';
 $born = $this->querylist( $bornQuery, 'local/items/liplain.phtml');
 
+$diedQuery = $prefixes . 'SELECT *
+WHERE {
+	?resourceUri <' . $this->namespaces["cpd"] . 'hasPeriod> ?period .
+	?period rdf:type <' . $this->namespaces["cpd"] . 'Death> .
+	?period <' . $this->namespaces["cpd"] . 'periodPlace> <'.$this->resourceUri.'> .
+}';
+$died = $this->querylist( $diedQuery, 'local/items/liplain.phtml');
+
 $bodiesQuery = $prefixes . 'SELECT *
 WHERE {
 	?resourceUri <' . $this->namespaces["cpd"] . 'bodyPlace> ?period .
@@ -24,8 +32,15 @@ $bodies = $this->querylist( $bodiesQuery, 'local/items/liplain.phtml');
 
 <?php if ( $born != "" ) { ?>
 	<div class="">
-		<h3 class="">In <?php echo $this->title ?> geborene Personen</h3>
+		<h3 class="">Hier geborene Personen</h3>
 		<?php echo $born; ?>
+	</div>
+<?php } ?>
+
+<?php if ( $died != "" ) { ?>
+	<div class="">
+		<h3 class="">Hier verstorbene Personen</h3>
+		<?php echo $died; ?>
 	</div>
 <?php } ?>
 

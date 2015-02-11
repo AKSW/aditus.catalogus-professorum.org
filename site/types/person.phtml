@@ -15,12 +15,12 @@ WHERE {
 	?resourceUri rdf:type ?classTypeof .
 	{ ?resourceUri rdf:type cpd:Birth . }
 	UNION
-	{ ?resourceUri rdf:type cpd:Death . }	
-	OPTIONAL { ?resourceUri cpd:periodPlace ?periodPlace . }
+	{ ?resourceUri rdf:type cpd:Death . }
 	OPTIONAL { ?resourceUri cpd:date ?date . }
-	OPTIONAL { ?resourceUri cpd:periodNote ?periodNote . }
-}';
-$birthDeath = $this->querylist( $birthDeathQuery, 'local/items/periodOfLife.phtml');
+	OPTIONAL { ?resourceUri cpd:periodNote ?periodNote . }	
+} ORDER BY ?date';
+//OPTIONAL { ?resourceUri cpd:periodPlace ?periodPlace . }
+$birthDeath = $this->querylist( $birthDeathQuery, 'local/items/periodOfLife.phtml', array('cpd' => $this->namespaces["cpd"]));
 
 /*
 Family: Parents, Siblings, Spouse, Childs
@@ -88,8 +88,7 @@ $periodQuery = $prefixes . 'SELECT *
 WHERE {
 	<' . $this->resourceUri . '> cpd:hasPeriod ?resourceUri .
 	?resourceUri rdf:type ?classTypeof .	
-	OPTIONAL { ?resourceUri cpd:periodPlace ?periodPlace . }
-	OPTIONAL { ?resourceUri cpd:periodBody ?periodBody . }
+	OPTIONAL { ?resourceUri cpd:periodPlace ?periodPlace . }	
 	OPTIONAL { ?resourceUri cpd:date ?date . }
 	OPTIONAL { ?resourceUri cpd:from ?from . }
 	OPTIONAL { ?resourceUri cpd:to ?to . }
@@ -105,7 +104,8 @@ WHERE {
 	//FILTER NOT EXISTS {  ?resourceUri rdf:type cpd:Birth . }
 	//FILTER NOT EXISTS {  ?resourceUri rdf:type cpd:Death .  }
 	//FILTER NOT EXISTS {  ?resourceUri rdf:type cpd:Family .  }
-$periodObject = $this->querylist($periodQuery, 'local/items/periodOfLife.phtml');
+	//OPTIONAL { ?resourceUri cpd:periodBody ?periodBody . }
+$periodObject = $this->querylist($periodQuery, 'local/items/periodOfLife.phtml', array('cpd' => $this->namespaces["cpd"]));
 ?>
 
 <h2 class=""><?php echo $this->title ?></h2>
@@ -117,14 +117,14 @@ if ( $denomination != "" ) { ?>
 <?php } ?>
 
 <?php if ( $birthDeath != "" ) { ?>
-	<div class="period-of-life">
+	<div class="period-of-life birthDeath">
 		<h3 class="">Lebensdaten</h3>
 		<?php echo $birthDeath; ?>
 	</div>
 <?php } ?>
 
 <?php if ( $familyLength > 0 ) { ?>
-	<div class="period-of-life">
+	<div class="period-of-life family">
 		<h3 class="">Familie</h3>
 		<?php // $this->_('family') ?>
 		<?php
@@ -137,9 +137,11 @@ if ( $denomination != "" ) { ?>
 <?php } ?>
 
 <?php if ( $periodObject != "" ) { ?>
-	<div class="period-of-life">
+	<div class="period-of-life periods">
 		<h3 class="">Lebenslauf</h3>
-		<?php echo $periodObject; ?>
+		<table class="table">
+			<?php echo $periodObject; ?>
+		</table>
 	</div>
 <?php } ?>
 

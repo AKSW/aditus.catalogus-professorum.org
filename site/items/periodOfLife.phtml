@@ -3,19 +3,50 @@
 $resourceUri = $this->resourceUri;
 $typeof = basename($this->classTypeof);
 
-$title = $this->title;
-$content = "";
+//$title = $this->title;
+$content = $this->title;;
 
-if ( $typeof == "Birth" || $typeof == "Death" ) {
+if ( $typeof == "Birth" || $typeof == "Death" ) { // Birth or Death
 
-	// Birth or Death
+	if ( $typeof == "Birth" ) {
+		$content = "geboren";
+	} else {
+		$content = "gestorben";
+	}
+
+	if ( isset($this->date) && ! empty($this->date) ) {
+		$content .= " " . $this->date;
+	}
+
+	$place = $this->query(array('where' => '<' . $this->resourceUri . '> <' . $this->cpd . 'periodPlace> ?resourceUri', 'template' => 'resource'));
+
+	if ( $place != "" ) {
+		$content .= " in " . $place;
+	}
+
+	$content = "<h4>" . $content . "</h4>";
+
+	if ( isset($this->periodNote) && ! empty($this->periodNote) ) {
+		$content .= '<p>&nbsp;&nbsp;&nbsp;Kommentar: ' . $this->periodNote . "</p>";
+	}
 	
 } else { // Study, Carreer, Graduation ...	other Periods
 
 	$date = "";
+	$content = "<tr><td>";
+
+	$classTypeof = 'SELECT *
+	WHERE {
+		<' . $this->classTypeof . '> <http://www.w3.org/2000/01/rdf-schema#label> ?resourceUri .
+		FILTER (lang(?resourceUri) = "de")
+	}';
+	$classTypeof = $this->querylist( $classTypeof, 'local/items/plain.phtml');
+	//$title .= ' <small>('.$this->_($typeof).')</small>';
+	$content .= ' <small>'.$classTypeof.'</small>';
+	$content .= "</td><td>";
 	
 	if ( isset($this->date) && ! empty($this->date) ) {
-		$date .= "Datum: " . $this->date;
+		$date .= $this->date;
 	}
 	if ( isset($this->from) && ! empty($this->to) ) {
 		$date .= "von ".  $this->from;
@@ -24,9 +55,21 @@ if ( $typeof == "Birth" || $typeof == "Death" ) {
 		$date .= " bis " . $this->to;
 	}
 	if ( $date != "" ) {
-		$content .= "<p>" . $date . "</p>";
-	}	
+		$content .= "<small>" . $date . "</small>";
+	}
 
+	$content .= "</td><td>";
+
+	$content .= $this->title;;
+
+
+	$periodBody = $this->query(array('where' => '<' . $this->resourceUri . '> <' . $this->cpd . 'periodBody> ?resourceUri', 'template' => 'resource'));
+	if ( $periodBody != "" ) {
+		//$content .= '<p>Körperschaft: <a href="'.$this->periodBody.'">'.$periodLabel.'</a></p>';
+		$content .= '<p>Körperschaft: '.$periodBody.'</p>';
+	}
+
+	/*
 	if ( isset($this->periodBody) && ! empty($this->periodBody) ) {
 		$periodLabel = $this->literal(array('uri' => $this->periodBody, 'property' => 'rdfs:label', 'template' => 'resource'));
 		if ( $periodLabel == "" ) {
@@ -34,8 +77,7 @@ if ( $typeof == "Birth" || $typeof == "Death" ) {
 		}
 		$content .= '<p>Körperschaft: <a href="'.$this->periodBody.'">'.$periodLabel.'</a></p>';
 	}
-
-	$title .= ' <small>('.$this->_($typeof).')</small>';
+	*/	
 
 	if ( isset($this->periodPlace) && ! empty($this->periodPlace) ) {
 		$content .= '<p>Ort: <a href="'.$this->periodPlace.'">'.basename($this->periodPlace).'</a></p>';
@@ -45,14 +87,18 @@ if ( $typeof == "Birth" || $typeof == "Death" ) {
 		$documentLabel = ( isset($this->periodDocumentLabel) && ! empty($this->periodDocumentLabel) ) ? $this->periodDocumentLabel : basename($this->periodDocument);
 		$content .= '<p>Dokument: <a href="'.$this->periodDocument.'">'.$documentLabel.'</a></p>';
 	}
+
+	if ( isset($this->periodNote) && ! empty($this->periodNote) ) {
+		$content .= '<p>Kommentar: ' . $this->periodNote . "</p>";
+	}
+
+	$content .= "</td></tr>";
 	
 }
 
-if ( isset($this->periodNote) && ! empty($this->periodNote) ) {
-	$content .= '<p>Kommentar: ' . $this->periodNote . "</p>";
-}
 
-echo "<h4>" . $title . "</h4>";
+//echo "<h4>" . $title . "</h4>";
+//echo $title;
 echo $content;
 
 ?><?php
