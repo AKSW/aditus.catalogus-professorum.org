@@ -2379,6 +2379,10 @@ div.section-sidewindows
     line-height: 1;
     text-shadow: none;
 }
+#application ul.clickMenu > li.main > a {
+    color: #FFF;
+    text-shadow: -1px -1px 1px #000;
+}
 
 #application ul.clickMenu li.hover > a
 {
