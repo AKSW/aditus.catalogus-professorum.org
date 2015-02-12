@@ -78,16 +78,36 @@ $("body").on("click", ".close-rdform-btn", function() {
 	return false;
 })
 
+var browseClasses = {
+    "Professoren und Personen" : ["http://catalogus-professorum.org/cpd/Person", "http://catalogus-professorum.org/cpd/Professor"],
+    "Körperschaften" : [ "http://catalogus-professorum.org/cpd/Body", "http://catalogus-professorum.org/cpd/Institution", "http://catalogus-professorum.org/cpd/Institute", "http://catalogus-professorum.org/cpd/Academy", "http://catalogus-professorum.org/cpd/Department", "http://catalogus-professorum.org/cpd/Faculty" ],
+    "Orte" :[ "http://ns.aksw.org/spatialHierarchy/City" ]
+  };
+
 /*
 Autocomplete Search
 */
+// create custom autoconmplete item with resource uri as href
+$.widget("custom.autocompleteLinkItem", $.ui.autocomplete, {
+	_renderItem: function( ul, item ) {
+		return $( "<li>" )
+		.attr( "data-value", item.value )
+		.append( '<a onclick="return false" href="' + item.value + '">' + item.label + "</a>" )
+		.appendTo( ul );
+		}
+});
 $("input.search-field").on("focus", function() {
 	var queryEndpoint = urlBase + "sparql";	
 	var apitype = "sparql";
 	var queryDataType = "json";
-	var queryStr = "SELECT DISTINCT * WHERE { ?item <http://www.w3.org/2000/01/rdf-schema#label> ?label. FILTER regex(?label,%s,'i')} ORDER BY ?label LIMIT 20";
+	var filterClasses = [];
+	$.each( browseClasses, function(key, value) {
+		$.merge(filterClasses,value);
+	});
+	var filter = "?body = <" + filterClasses.join("> || ?body = <") + ">";
+	var queryStr = "SELECT DISTINCT * WHERE { ?item <http://www.w3.org/2000/01/rdf-schema#label> ?label . ?item <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?body . FILTER ( ( " + filter + " ) && regex(?label,%s,'i') ) } ORDER BY ?label LIMIT 20";
 
-	$(this).autocomplete({
+	$(this).autocompleteLinkItem().autocompleteLinkItem({
 		source: function( request, response ) {		
 			var query = queryStr.replace(/%s/g, "'" + request.term + "'");
 			$.ajax({
@@ -106,7 +126,7 @@ $("input.search-field").on("focus", function() {
 	            	}));
 	            },
 	            error: function(err) {
-	            	_this.showAlert( "error", 'Error on autocomplete: ' + JSON.stringify(err, null, ' ') );
+	            	console.log( 'Error on autocomplete: ', err );
 	            }
 			});
 	  	},
@@ -116,6 +136,11 @@ $("input.search-field").on("focus", function() {
 		minLength: 2
 	});
 });
+
+// add browser.js 
+if ( $(".proflist").length > 0 ) {
+	$(".proflist").Browser(browseClasses);
+}
 
 // drag and drop functionality for the root form
 function drag_start(event) {
