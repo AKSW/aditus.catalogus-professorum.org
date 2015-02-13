@@ -3,6 +3,12 @@ $prefixes = '
 PREFIX cpd: <' . $this->namespaces["cpd"] . '>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> ';
 
+$locatedInQuery = $prefixes . 'SELECT *
+WHERE {
+	<'.$this->resourceUri.'> <' . $this->namespaces["shv"] . 'isLocatedIn> ?resourceUri .
+}';
+$locatedIn = $this->querylist( $locatedInQuery, 'local/items/liplain.phtml');
+
 $bornQuery = $prefixes . 'SELECT *
 WHERE {
 	?resourceUri <' . $this->namespaces["cpd"] . 'hasPeriod> ?period .
@@ -29,6 +35,12 @@ $bodies = $this->querylist( $bodiesQuery, 'local/items/liplain.phtml');
 ?>
 
 <h2 class=""><?php echo $this->title ?></h2>
+
+<?php if ( $locatedIn != "" ) { ?>
+	<div class="">
+		<p>Liegt in: <?php echo $locatedIn; ?></p>
+	</div>
+<?php } ?>
 
 <?php if ( $born != "" ) { ?>
 	<div class="">
