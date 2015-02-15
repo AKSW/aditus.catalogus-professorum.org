@@ -33,7 +33,8 @@ List Professors with simple navigation and search
 					$(".browser-search").val( $(".search-field").attr("data-value") ).trigger("keyup");
 				} 
 			});
-		},
+			_this.printNewResBtn();
+		},		
 
 		printClassNavigation : function() {
 			var _this = this;
@@ -62,8 +63,9 @@ List Professors with simple navigation and search
 		printBrowser : function() {
 			var _this = this;
 			var browser = $( '<div class="browser panel panel-default"></div>' );
-			var searchField = $('<input type="search" class="form-control browser-search" style="width:30%" placeholder="Suche ...">');
-			$(browser).append( $('<div class="panel-heading"></div>').append(searchField) );
+			var searchField = $('<input type="search" class="form-control browser-search pull-right" style="width:30%" placeholder="Suche ...">');
+
+			$(browser).append( $('<div class="panel-heading" style="height:55px"></div>').append(searchField) );
 			$(browser).append('<ul class="browser-list list-group"></ul>');
 			$(browser).append( $('<div class="panel-footer"></div>').append('<div class="browser-nav btn-group"></div><div class="browser-counter pull-right"></p>') );
 
@@ -76,6 +78,41 @@ List Professors with simple navigation and search
 				
 			});			
 		},
+
+		printNewResBtn : function() {
+			var _this = this;
+			var $container = $(".panel-heading");			
+			$(".new-resource-button", $container).remove();
+			var $dropdown = $('<div class="dropdown new-resource-button pull-right" style="margin:0 10px"></div>' );
+
+			if ( _this.settings[_this.selection].length == 1 ) {
+				var label = _this.settings[_this.selection][0].split("/").reverse()[0];
+				$dropdown.append( '<a href="#" data-resource="' + _this.settings[_this.selection] + '" class="btn btn-default">Neue Resource: ' + label + '</a>' );
+			} else {
+				var $listContainer = $( '<ul class="dropdown-menu" role="menu" aria-labelledby="newResource"></ul>' );
+				$.each( _this.settings[_this.selection], function(k,v) {
+					var label = v.split("/").reverse()[0];
+					$listContainer.append( '<li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-resource="' + v + '">' + label + '</a></li>' );
+				} );
+
+				$dropdown.append ( '<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">Neue Resource... <span class="caret"></span></button>' );
+				$dropdown.append( $listContainer );
+
+				
+			}
+			$container.append( $dropdown );
+
+			$("a", $listContainer).click(function() {
+				var template = $(this).attr("data-resource").split("/").reverse()[0];
+				$("#resourceTemplate").val( template );
+				resourceTemplate = template;
+				createForm();
+			});
+			
+
+
+		},
+
 		printPage : function(list) {
 			var _this = this;
 			var $list = $(".browser-list").html("");
