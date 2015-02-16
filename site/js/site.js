@@ -80,7 +80,7 @@ $("body").on("click", ".close-rdform-btn", function() {
 
 // classes for search and browser
 var browseClasses = {
-    "Professoren und Personen" : ["http://catalogus-professorum.org/cpd/Person", "http://catalogus-professorum.org/cpd/Professor"],
+    "Professoren" : ["http://catalogus-professorum.org/cpd/Professor"],
     "Körperschaften" : [ "http://catalogus-professorum.org/cpd/Body", "http://catalogus-professorum.org/cpd/Institution", "http://catalogus-professorum.org/cpd/Institute", "http://catalogus-professorum.org/cpd/Academy", "http://catalogus-professorum.org/cpd/Department", "http://catalogus-professorum.org/cpd/Faculty" ],
     "Orte" :[ "http://ns.aksw.org/spatialHierarchy/City" ]
   };
