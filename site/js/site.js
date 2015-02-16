@@ -78,6 +78,7 @@ $("body").on("click", ".close-rdform-btn", function() {
 	return false;
 })
 
+// classes for search and browser
 var browseClasses = {
     "Professoren und Personen" : ["http://catalogus-professorum.org/cpd/Person", "http://catalogus-professorum.org/cpd/Professor"],
     "Körperschaften" : [ "http://catalogus-professorum.org/cpd/Body", "http://catalogus-professorum.org/cpd/Institution", "http://catalogus-professorum.org/cpd/Institute", "http://catalogus-professorum.org/cpd/Academy", "http://catalogus-professorum.org/cpd/Department", "http://catalogus-professorum.org/cpd/Faculty" ],
@@ -139,7 +140,7 @@ $("input.search-field").on("focus", function() {
 
 // add browser.js 
 if ( $(".proflist").length > 0 ) {
-	$(".proflist").Browser(browseClasses);
+	$(".proflist").Browser( { "model" : "http://aditus.catalogus-professorum.org/lipsiensium/", "classes" : browseClasses } );
 }
 
 // drag and drop functionality for the root form

@@ -4,7 +4,8 @@ List Professors with simple navigation and search
 (function( $ ) {
 	function Browser( elem ) {
 		this.$elem = $(elem);
-		this.settings = null;
+		this.classes = null;
+		this.model = null;
 		this.selection = null;
 		this.offset = 0;
 		this.limit = 10;
@@ -17,7 +18,7 @@ List Professors with simple navigation and search
 		init : function() {
 			var _this = this;	
 			if ( _this.selection == null ) { // set init selection
-				for (var prop in _this.settings) {
+				for (var prop in _this.classes) {
 					_this.selection = prop;
 					break;
 				}				
@@ -40,7 +41,7 @@ List Professors with simple navigation and search
 			var _this = this;
 			var navContainer = $('<ul class="browser-class-nav nav nav-tabs"></ul>');
 			var i = 0;
-			$.each(_this.settings, function(label,classes) {
+			$.each(_this.classes, function(label,classes) {
 				var element = $( '<li><a href="#" data-item="'+label+'">'+label+'</a></li>' );
 				$(navContainer).append( element );
 			});
@@ -85,12 +86,12 @@ List Professors with simple navigation and search
 			$(".new-resource-button", $container).remove();
 			var $dropdown = $('<div class="dropdown new-resource-button pull-right" style="margin:0 10px"></div>' );
 
-			if ( _this.settings[_this.selection].length == 1 ) {
-				var label = _this.settings[_this.selection][0].split("/").reverse()[0];
-				$dropdown.append( '<a href="#" data-resource="' + _this.settings[_this.selection] + '" class="btn btn-default">Neue Resource: ' + label + '</a>' );
+			if ( _this.classes[_this.selection].length == 1 ) {
+				var label = _this.classes[_this.selection][0].split("/").reverse()[0];
+				$dropdown.append( '<a href="#" data-resource="' + _this.classes[_this.selection] + '" class="btn btn-default">Neue Resource: ' + label + '</a>' );
 			} else {
 				var $listContainer = $( '<ul class="dropdown-menu" role="menu" aria-labelledby="newResource"></ul>' );
-				$.each( _this.settings[_this.selection], function(k,v) {
+				$.each( _this.classes[_this.selection], function(k,v) {
 					var label = v.split("/").reverse()[0];
 					$listContainer.append( '<li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-resource="' + v + '">' + label + '</a></li>' );
 				} );
@@ -106,6 +107,10 @@ List Professors with simple navigation and search
 				var template = $(this).attr("data-resource").split("/").reverse()[0];
 				$("#resourceTemplate").val( template );
 				resourceTemplate = template;
+				if ( _this.model != null ) {
+					modelIri =  _this.model;
+					$("#modelIri").val( _this.model );
+				}
 				createForm();
 			});
 			
@@ -121,7 +126,7 @@ List Professors with simple navigation and search
 			
 			for (var i = _this.offset; i < list.length; i++) {
 				if (i >= (_this.offset + _this.limit) ) { break; }
-				var label = (typeof list[i].label.value !== undefined) ? list[i].label.value : list[i].resourceUri.value.split("/").reverse()[0];
+				var label = (list[i].label !== undefined) ? list[i].label.value : list[i].resourceUri.value.split("/").reverse()[0];
 				$list.append('<li class="browser-entry list-group-item"><a href="'+list[i].resourceUri.value+'">'+label+'</a></li>');				
 			};
 
@@ -157,20 +162,24 @@ List Professors with simple navigation and search
 			var _this = this;
 			var search = new RegExp( search, "gi");
 			return $.grep(_this.list, function(item) {
-				var label = (typeof item.label.value !== undefined) ? item.label.value : item.resourceUri.value;
+				var label = (item.label !== undefined) ? item.label.value : item.resourceUri.value;
 				return ( label.search(search) !== -1 )
 			} );
 		},
 
 		fetch : function(callback) {
 			var _this = this;
-			var filter = "?body = <" + _this.settings[_this.selection].join("> || ?body = <") + ">";			
+			var filter = "?body = <" + _this.classes[_this.selection].join("> || ?body = <") + ">";			
+			var from = "";
+			if (_this.model != null) {
+				from = " FROM " + _this.model;
+			}
 
 			$.ajax({
 				url: urlBase + "sparql",
 				dataType: "json",
 				data: {
-					query: _this.prefixes + "SELECT DISTINCT * WHERE { ?resourceUri rdf:type ?body . OPTIONAL { ?resourceUri rdfs:label ?label . } FILTER ( "+filter+" ) } ORDER BY ?label ?resourceUri",
+					query: _this.prefixes + "SELECT DISTINCT * "+from+" WHERE { ?resourceUri rdf:type ?body . OPTIONAL { ?resourceUri rdfs:label ?label . } FILTER ( "+filter+" ) } ORDER BY ?label ?resourceUri",
 					format: "json"
 				},
 				success: function( data ) {
@@ -188,7 +197,10 @@ List Professors with simple navigation and search
 	$.fn.Browser = function( settings ) {
 		return this.each(function() {
 			var browser = new Browser( this );
-			browser.settings = settings;
+			browser.classes = settings["classes"];
+			if ( settings["model"] !== undefined ) {
+				browser.model = settings["model"];
+			}
 			browser.printClassNavigation();
 			browser.printBrowser();
 			browser.init();
