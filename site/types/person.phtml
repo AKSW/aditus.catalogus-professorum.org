@@ -110,10 +110,14 @@ $periodObject = $this->querylist($periodQuery, 'local/items/periodOfLife.phtml',
 
 <h2 class=""><?php echo $this->title ?></h2>
 
-<?php 
-$denomination = $this->literal(array('property' => $this->namespaces["cpd"] . 'denomination'));
+<?php $denomination = $this->literal(array('property' => $this->namespaces["cpd"] . 'denomination'));
 if ( $denomination != "" ) { ?>
 	<p>Konfession: <?php echo $denomination; ?></p>
+<?php } ?>
+
+<?php $alternativeWritingOfSurname = $this->literal(array('property' => $this->namespaces["cpd"] . 'alternativeWritingOfSurname'));
+if ( $alternativeWritingOfSurname != "" ) { ?>
+	<p>Namensvariante: <?php echo $alternativeWritingOfSurname; ?></p>
 <?php } ?>
 
 <?php if ( $birthDeath != "" ) { ?>
