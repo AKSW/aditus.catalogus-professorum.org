@@ -8,7 +8,7 @@ List Professors with simple navigation and search
 		this.model = null;
 		this.selection = null;
 		this.offset = 0;
-		this.limit = 10;
+		this.limit = 15;
 		this.list = [];
 		this.prefixes = 'PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n';
 		return this;
@@ -103,7 +103,7 @@ List Professors with simple navigation and search
 			}
 			$container.append( $dropdown );
 
-			$("a", $listContainer).click(function() {
+			$("a", $dropdown).click(function() {
 				var template = $(this).attr("data-resource").split("/").reverse()[0];
 				$("#resourceTemplate").val( template );
 				resourceTemplate = template;

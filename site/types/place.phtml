@@ -42,6 +42,16 @@ $bodies = $this->querylist( $bodiesQuery, 'local/items/liplain.phtml');
 	</div>
 <?php } ?>
 
+<?php $priorTo = $this->query(array('where' => '<' . $this->resourceUri . '> <' . $this->namespaces["shv"] . 'priorTo> ?resourceUri', 'template' => 'resource'));
+if ( $priorTo != "" ) { ?>
+	<p>Vorgänder von: <?php echo $priorTo; ?></p>
+<?php } ?>
+
+<?php $subsequentTo = $this->query(array('where' => '<' . $this->resourceUri . '> <' . $this->namespaces["shv"] . 'subsequentTo> ?resourceUri', 'template' => 'resource'));
+if ( $subsequentTo != "" ) { ?>
+	<p>Nachfolger von: <?php echo $subsequentTo; ?></p>
+<?php } ?>
+
 <?php if ( $born != "" ) { ?>
 	<div class="">
 		<h3 class="">Hier geborene Personen</h3>

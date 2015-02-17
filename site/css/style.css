@@ -67,7 +67,9 @@ h1 {
 }
 
 .loading {
-    background: url("../img/loader.gif") top left no-repeat;
+    background-image: url("../img/loader.gif");
+    background-position: left center;
+    background-repeat: no-repeat;
     min-height: 20px;
     padding-left: 20px;
 }
@@ -76,7 +78,7 @@ h1 {
 }
 
 
-.rdform-container {
+.rdform-popup-layer {
     position: absolute;    
     background: white;
     width: 100%;
@@ -84,7 +86,7 @@ h1 {
     top: 0;
     background:rgba(255,255,255,0.5);
 }
-.rdform-container > .rdform {
+.rdform-container {
     width: 50%;
     max-width: 800px;
     min-width: 600px;    
@@ -122,7 +124,7 @@ h1 {
 }
 
 
-.rdform p .close-rdform-btn {
+.close-rdform-btn {
     margin-right: -45px;
     margin-top: -45px;   
 }

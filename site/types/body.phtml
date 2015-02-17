@@ -13,10 +13,14 @@ $persons = $this->querylist( $personsQuery, 'local/items/liplain.phtml');
 
 <h2 class=""><?php echo $this->title ?></h2>
 
-<?php
-$bodyPlace = $this->query(array('where' => '<' . $this->resourceUri . '> <' . $this->namespaces["cpd"] . 'bodyPlace> ?resourceUri', 'template' => 'resource'));
+<?php $bodyPlace = $this->query(array('where' => '<' . $this->resourceUri . '> <' . $this->namespaces["cpd"] . 'bodyPlace> ?resourceUri', 'template' => 'resource'));
 if ( $bodyPlace != "" ) { ?>
 	<p>Ort: <?php echo $bodyPlace; ?></p>
+<?php } ?>
+
+<?php $isPartOf = $this->query(array('where' => '<' . $this->resourceUri . '> <' . $this->namespaces["cpd"] . 'isPartOf> ?resourceUri', 'template' => 'resource'));
+if ( $isPartOf != "" ) { ?>
+	<p>Ist Teil von: <?php echo $isPartOf; ?></p>
 <?php } ?>
 
 <?php if ( $persons != "" ) { ?>

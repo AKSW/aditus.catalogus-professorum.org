@@ -9,7 +9,7 @@ function createForm( owData ) {
 	var template = "form_" + urlBaseWebsafe + "." + resourceTemplate + ".html";
 	//var resourceIri = $(this).attr("data-resourceIri");
 
-	$("body").append(container);
+	$("body").append( $('<div class="rdform-popup-layer"></div>').append(container));
 
 	var hash = '40cd750bba9870f18aada2478b24840a';
 	var data = null;
@@ -50,7 +50,7 @@ function createForm( owData ) {
 
 	//owRdform.settings.$elem.data("resourceUri", resourceUri);
 	owRdform.settings.$elem.prepend('<div id="rdform-drag-header"></div>');
-	owRdform.settings.$elem.prepend('<p><button class="btn btn-default close-rdform-btn pull-right" alt="Close title="Close"><span class="glyphicon glyphicon-remove"></span></button></p>');
+	$(container).prepend('<button class="btn btn-default close-rdform-btn pull-right" alt="Close title="Close"><span class="glyphicon glyphicon-remove"></span></button>');
 	window.scrollTo(0,0);
 	drag_init();
 }
@@ -71,7 +71,7 @@ $(".rdform-new-btn").click(function() {
 
 // close the current form window
 $("body").on("click", ".close-rdform-btn", function() {
-	var form = $(this).parentsUntil(".rdform-container");
+	var form = $(this).parentsUntil(".rdform-popup-layer");
 	form.hide( "fast", function() {
 					form.parent().remove();
 				});
