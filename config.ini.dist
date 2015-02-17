@@ -105,12 +105,12 @@ mail.localname.recovery = "ontowiki-account-recovery"
 ;;;;
 ;; Uncomment this line to turn off the query and object cache (NOT recommended)
 ;;
-;cache.enable       = false
-;cache.query.enable = false
+cache.enable       = false
+cache.query.enable = false
 
 
 ;; Options for cache frontend
-cache.frontend.enable                               = true
+cache.frontend.enable                               = false
 cache.frontend.lifetime                             = 0
 ;cache.frontend.logging                             = false
 ;cache.frontend.write_control                       = true
