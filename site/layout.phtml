@@ -79,7 +79,7 @@ $classTypeof = basename($this->literal(array('property' => EF_RDF_NS . 'type', '
 			?>
 
 			<div class="pull-right">
-	        	<form class="search pull-right" action="<?php echo $this->urlBase ?>Katalog.html" method="POST" role="search">
+	        	<form class="search pull-right" action="<?php echo $this->urlBase ?>catalogue" method="POST" role="search">
 	        		<input name="mode" type="hidden" value="person" />
 				    <input name="q" class="search-field form-control" role="search" data-value="<?php if (isset($_POST['q'])) echo $_POST['q'] ?>" type="text" placeholder="Suche ..." />
 				</form>

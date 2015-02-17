@@ -196,7 +196,7 @@ class OntoWiki_Menu_Registry
         }
 
         // add link to frontend-catalogue
-        $applicationMenu->setEntry('Frontend-Katalog', $owApp->config->urlBase . 'Katalog');
+        $applicationMenu->setEntry('Frontend-Katalog', $owApp->config->urlBase . 'catalogue');
 
         return $applicationMenu;
     }
