@@ -7,15 +7,11 @@ html, body {
     padding: 0;    
     height:100%;
     position: relative;
-}
-body, p {
-    font-size: 13pt;
     line-height: normal;
 }
-
 h1 {
     //letter-spacing: 0.1em;
-    font-size: 24px;
+    font-size: 1.5em;
     //font-weight: bold;
     text-align: left;
 }
@@ -29,8 +25,13 @@ h1 {
     font-family: Georgia,serif;
     color: #750000;
 }
+.menu {
+    text-align: right;
+    padding: 1em 0;
+}
 .main-menu {
     display: inline-block;
+    padding: 1.2em;
 }
 .search {
     padding: 0.7em 0;
@@ -44,23 +45,17 @@ h1 {
 }
 .content {
     padding: 20px 0;
-    text-align: justify;    
 }
 
 .period-of-life p {
     //padding-left: 40px;
 }
 
-
-.menu {
-    text-align: right;
-    padding:    1em;
-}
-
 .footer {
     background: none repeat scroll 0% 0% #EBD9BE;
     //position: absolute;
     bottom: 0;
+    font-size: 0.9em;
     width: 100%;
     min-height: 10%;
     border-top: 1px solid lightGray;
@@ -87,8 +82,8 @@ h1 {
     background:rgba(255,255,255,0.5);
 }
 .rdform-container {
-    width: 50%;
-    max-width: 800px;
+    width: 65%;
+    max-width: 900px;
     min-width: 600px;    
     position: absolute;
     top: 100px;
@@ -116,7 +111,7 @@ h1 {
 
 .form-control.input-sm {
     /*display: inline-block;*/
-    width: 70%;
+    /*width: 70%;*/
 }
 .form-control.input-sm.rdform-datepicker {
     display: block;
