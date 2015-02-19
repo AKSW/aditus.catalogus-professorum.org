@@ -1,6 +1,6 @@
 <form base="http://aditus.catalogus-professorum.org/" prefix="cpd http://catalogus-professorum.org/cpd/ cpl http://aditus.catalogus-professorum.org/lipsiensium/ rdfs http://www.w3.org/2000/01/rdf-schema#">
   <legend>Körperschaft</legend>
-  <div typeof="cpd:Body" resource="cpl:body/{rdfs:label}" typeof-select='{"cpd:Academy":"Hochschule", "cpd:Faculty": "Fakultät / Sektion", "cpd:Institute":"Institut / FB,WB,WG", "cpd:Department":"Abteilung / Lehrstuhl", "cpd:Organisation":"Organisation", "cpd:PoliticalOrganisation":"Politische Organisation", "cpd:Party":"Partei", "cpd:AcademicSociety":"Wissenschafliche Gesellschaft", "cpd:OtherOrganisation":"Andere Organisation","cpd:Body":"Andere Körperschaft"}'>
+  <div typeof="cpd:Body" resource="cpl:body/{rdfs:label}" typeof-select='{"cpd:School":"Schule", "cpd:Academy":"Hochschule", "cpd:Faculty": "Fakultät / Sektion", "cpd:Institute":"Institut / FB,WB,WG", "cpd:Department":"Abteilung / Lehrstuhl", "cpd:Organisation":"Organisation", "cpd:PoliticalOrganisation":"Politische Organisation", "cpd:Party":"Partei", "cpd:AcademicSociety":"Wissenschafliche Gesellschaft", "cpd:OtherOrganisation":"Andere Organisation","cpd:Body":"Andere Körperschaft"}'>
 
     <!--
     Subclass Selector: Institution, Department, Acadamy, ...
@@ -10,7 +10,7 @@
     <input name="rdfs:label" type="literal" datatype="xsd:string" placeholder="Bezeichnung" required />
 
     <label>Ort</label>
-    <input name="cpd:bodyPlace" type="resource" external 
+    <input name="cpd:bodyPlace" type="resource" external subform="CityPlain"
       autocomplete query-endpoint="http://aditus.catalogus-professorum.org/sparql"
       query-apitype="sparql" query-datatype="json"
       query="SELECT DISTINCT * WHERE {?item <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://ns.aksw.org/spatialHierarchy/City>;<http://www.w3.org/2000/01/rdf-schema#label> ?label. FILTER regex(?label,%s,'i')} ORDER BY ?label LIMIT 20"

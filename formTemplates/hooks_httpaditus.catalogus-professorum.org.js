@@ -117,7 +117,7 @@ RDForm_OntoWiki_Hooks.prototype = {
 
 		// manually fix DNB-URL
 		if ( $(property).attr("name") == "cpd:gnd" ) {
-			if ( $(property).val().search(/^http/) == -1 ) {
+			if (  $(property).val() != "" && $(property).val().search(/^http/) == -1 ) {
 				$(property).val( "http://d-nb.info/gnd/" + $(property).val() );
 			}
 		}

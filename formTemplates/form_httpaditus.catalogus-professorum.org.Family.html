@@ -16,7 +16,7 @@
     <input name="cpd:familyParent" type="resource" external value="{classUri}" readonly hidden />
 
     <label>Partner / Partnerin</label>
-    <input name="cpd:familyParent" type="resource" external multiple
+    <input name="cpd:familyParent" type="resource" external multiple placeholder="Person hier suchen oder neu erstellen"
       subform="Person"
       autocomplete query-endpoint="http://aditus.catalogus-professorum.org/sparql"
       query-apitype="sparql" query-datatype="json"
@@ -24,7 +24,7 @@
     />
 
     <label>Tochter / Sohn</label>
-    <input name="cpd:familyChild" type="resource" external multiple
+    <input name="cpd:familyChild" type="resource" external multiple placeholder="Person hier suchen oder neu erstellen"
       subform="Person"
       autocomplete query-endpoint="http://aditus.catalogus-professorum.org/sparql"
       query-apitype="sparql" query-datatype="json"

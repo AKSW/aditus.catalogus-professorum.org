@@ -6,7 +6,7 @@
     <input name="rdfs:label" type="literal" datatype="xsd:string" value="{familyName}" />    
 
     <label>Mutter / Vater</label>
-    <input name="cpd:familyParent" type="resource" external multiple 
+    <input name="cpd:familyParent" type="resource" external multiple placeholder="Person hier suchen oder neu erstellen"
       subform="Person"
       autocomplete query-endpoint="http://aditus.catalogus-professorum.org/sparql"
       query-apitype="sparql" query-datatype="json"
@@ -16,7 +16,7 @@
     <input name="cpd:familyChild" type="resource" external value="{classUri}" readonly hidden /> 
 
     <label>Bruder / Schwester</label>
-    <input name="cpd:familyChild" type="resource" external multiple
+    <input name="cpd:familyChild" type="resource" external multiple placeholder="Person hier suchen oder neu erstellen"
       subform="Person"
       autocomplete query-endpoint="http://aditus.catalogus-professorum.org/sparql"
       query-apitype="sparql" query-datatype="json"

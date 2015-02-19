@@ -3,7 +3,15 @@
   <div typeof="cpd:QualificationDocument" resource="cpl:qualification-document/{rdfs:label}" multiple>
     
     <label>Bezeichnung</label>
-    <input type="literal" textarea name="rdfs:label" datatype="xsd:string" placeholder="Titel des Dokuments / Dissertationsthema" />
+    <input type="literal" textarea name="rdfs:label" datatype="xsd:string" placeholder="Titel des Dokuments / Dissertationsthema" />    
+
+    <label>Gutachter</label>
+    <input name="cpd:hasTutor" type="resource" external multiple additional placeholder="Person hier suchen oder neu erstellen"
+      subform="Person"
+      autocomplete query-endpoint="http://aditus.catalogus-professorum.org/sparql"
+      query-apitype="sparql" query-datatype="json"
+      query="SELECT DISTINCT * WHERE { ?item <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?body . ?item <http://www.w3.org/2000/01/rdf-schema#label> ?label . FILTER ( ( ?body = <http://catalogus-professorum.org/cpd/Person> || ?body = <http://catalogus-professorum.org/cpd/Professor> ) && regex(?label,%s,'i') ) } ORDER BY ?label LIMIT 20"
+    />
 
   </div>
 </form>
