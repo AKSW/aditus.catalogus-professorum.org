@@ -5,11 +5,11 @@ var urlBaseWebsafe = urlBase.replace(/[^a-z0-9-_.]/gi,'');
 New RDForm
 */
 function createForm( owData ) {
+	var popupContainer = $('<div class="rdform-popup-layer"></div>');
 	var container = $('<div class="rdform-container"></div>');
 	var template = "form_" + urlBaseWebsafe + "." + resourceTemplate + ".html";
-	//var resourceIri = $(this).attr("data-resourceIri");
-
-	$("body").append( $('<div class="rdform-popup-layer"></div>').append(container));
+	var langFile = "de.js";
+	$("body").append(popupContainer.append(container));
 
 	var hash = '40cd750bba9870f18aada2478b24840a';
 	var data = null;
@@ -25,7 +25,7 @@ function createForm( owData ) {
 		$container: container,
 		template: template,
 		hooks: "owrdform_hooks.js",
-		lang: "de.js",
+		lang: langFile,
 		data: data
 	});
 	owRdform.init( function(result){ 
@@ -42,7 +42,7 @@ function createForm( owData ) {
 			});
 		} else {
 			container.hide( "fast", function() { 
-				container.remove(); 
+				popupContainer.remove(); 
 			});
 		}
 		
@@ -79,11 +79,6 @@ $("body").on("click", ".close-rdform-btn", function() {
 })
 
 // classes for search and browser
-var browseClasses = {
-    "Professoren" : ["http://catalogus-professorum.org/cpd/Professor"],
-    "Körperschaften" : [ "http://catalogus-professorum.org/cpd/Body", "http://catalogus-professorum.org/cpd/Institution", "http://catalogus-professorum.org/cpd/Institute", "http://catalogus-professorum.org/cpd/Academy", "http://catalogus-professorum.org/cpd/Department", "http://catalogus-professorum.org/cpd/Faculty" ],
-    "Orte" :[ "http://ns.aksw.org/spatialHierarchy/City" ]
-  };
 var browserArg = {
 		"model" : [ "http://aditus.catalogus-professorum.org/lipsiensium/" ],
 		"browse" : {
@@ -91,7 +86,7 @@ var browserArg = {
 				"classes" : ["http://catalogus-professorum.org/cpd/Professor"]
 			},
 			"Körperschaften" : {
-				"classes" : [ "http://catalogus-professorum.org/cpd/Body", "http://catalogus-professorum.org/cpd/Institution", "http://catalogus-professorum.org/cpd/Institute", "http://catalogus-professorum.org/cpd/Academy", "http://catalogus-professorum.org/cpd/Department", "http://catalogus-professorum.org/cpd/Faculty" ]
+				"classes" : [ "http://catalogus-professorum.org/cpd/Body", "http://catalogus-professorum.org/cpd/Institution", "http://catalogus-professorum.org/cpd/Institute", "http://catalogus-professorum.org/cpd/Academy", "http://catalogus-professorum.org/cpd/Department", "http://catalogus-professorum.org/cpd/Faculty", "http://catalogus-professorum.org/cpd/School", "http://catalogus-professorum.org/cpd/Organisation", "http://catalogus-professorum.org/cpd/Party", "http://catalogus-professorum.org/cpd/PoliticalOrganisation", "http://catalogus-professorum.org/cpd/AcademicSociety", "http://catalogus-professorum.org/cpd/OtherOrganisation" ]
 			},
 			"Orte" : {
 				"classes" : ["http://ns.aksw.org/spatialHierarchy/City", "http://ns.aksw.org/spatialHierarchy/AdministrativeDistrict", "http://ns.aksw.org/spatialHierarchy/Country"]
