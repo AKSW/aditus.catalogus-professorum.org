@@ -84,6 +84,20 @@ var browseClasses = {
     "Körperschaften" : [ "http://catalogus-professorum.org/cpd/Body", "http://catalogus-professorum.org/cpd/Institution", "http://catalogus-professorum.org/cpd/Institute", "http://catalogus-professorum.org/cpd/Academy", "http://catalogus-professorum.org/cpd/Department", "http://catalogus-professorum.org/cpd/Faculty" ],
     "Orte" :[ "http://ns.aksw.org/spatialHierarchy/City" ]
   };
+var browserArg = {
+		"model" : [ "http://aditus.catalogus-professorum.org/lipsiensium/" ],
+		"browse" : {
+			"Professoren" : {
+				"classes" : ["http://catalogus-professorum.org/cpd/Professor"]
+			},
+			"Körperschaften" : {
+				"classes" : [ "http://catalogus-professorum.org/cpd/Body", "http://catalogus-professorum.org/cpd/Institution", "http://catalogus-professorum.org/cpd/Institute", "http://catalogus-professorum.org/cpd/Academy", "http://catalogus-professorum.org/cpd/Department", "http://catalogus-professorum.org/cpd/Faculty" ]
+			},
+			"Orte" : {
+				"classes" : ["http://ns.aksw.org/spatialHierarchy/City", "http://ns.aksw.org/spatialHierarchy/AdministrativeDistrict", "http://ns.aksw.org/spatialHierarchy/Country"]
+			}
+		}
+	};
 
 /*
 Autocomplete Search
@@ -102,8 +116,8 @@ $("input.search-field").on("focus", function() {
 	var apitype = "sparql";
 	var queryDataType = "json";
 	var filterClasses = [];
-	$.each( browseClasses, function(key, value) {
-		$.merge(filterClasses,value);
+	$.each( browserArg["browse"], function(key, value) {
+		$.merge(filterClasses,value["classes"]);
 	});
 	var filter = "?body = <" + filterClasses.join("> || ?body = <") + ">";
 	var queryStr = "SELECT DISTINCT * WHERE { ?item <http://www.w3.org/2000/01/rdf-schema#label> ?label . ?item <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?body . FILTER ( ( " + filter + " ) && regex(?label,%s,'i') ) } ORDER BY ?label LIMIT 20";
@@ -140,7 +154,7 @@ $("input.search-field").on("focus", function() {
 
 // add browser.js 
 if ( $(".proflist").length > 0 ) {
-	$(".proflist").Browser( { "model" : "http://aditus.catalogus-professorum.org/lipsiensium/", "classes" : browseClasses } );
+	$(".proflist").Browser( browserArg );
 }
 
 // drag and drop functionality for the root form

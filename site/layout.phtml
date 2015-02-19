@@ -82,21 +82,21 @@ $classTypeof = basename($this->literal(array('property' => EF_RDF_NS . 'type', '
 
 				<?php if ( $owApp->getUser()->isAnonymousUser() ) { ?>
 
-				<form method="post" action="<?php echo $this->urlBase ?>application/login" class="search form-inline" name="locallogin">
-					<input type="hidden" name="logintype" value="locallogin" />
-					<input type="hidden" name="redirect-uri" value="%2Fabout" />
+					<form method="post" action="<?php echo $this->urlBase ?>application/login" class="search form-inline" name="locallogin">
+						<input type="hidden" name="logintype" value="locallogin" />
+						<input type="hidden" name="redirect-uri" value="%2Fabout" />
 
-					<div class="form-group">
-						<label for="username" class="sr-only">Benutzername</label>
-						<input class="form-control" type="text" id="username" name="username" placeholder="Benutzername" />
-					</div>
-					<div class="form-group">
-						<label for="password" class="sr-only">Kennwort</label>
-						<input class="form-control" type="password" id="password" name="password" placeholder="Passwort" />
-					</div>
+						<div class="form-group">
+							<label for="username" class="sr-only">Benutzername</label>
+							<input class="form-control" type="text" id="username" name="username" placeholder="Benutzername" />
+						</div>
+						<div class="form-group">
+							<label for="password" class="sr-only">Kennwort</label>
+							<input class="form-control" type="password" id="password" name="password" placeholder="Passwort" />
+						</div>
 
-					<button type="submit" class="btn btn-default">Anmelden</button>
-				</form>
+						<button type="submit" class="btn btn-default">Anmelden</button>
+					</form>
 
 				<?php } else { ?>
 
@@ -122,7 +122,7 @@ $classTypeof = basename($this->literal(array('property' => EF_RDF_NS . 'type', '
 		<?php if ( ! $owApp->getUser()->isAnonymousUser() ) { ?>
 
 			<div class="menu pull-left">
-				Anmgemeldet als: <?php echo $owApp->getUser()->getUsername(); ?> | 
+				Angemeldet als: <?php echo $owApp->getUser()->getUsername(); ?> | 
 				<a href="<?php echo $this->urlBase ?>application/logout">Abmelden</a>
 			</div>
 
