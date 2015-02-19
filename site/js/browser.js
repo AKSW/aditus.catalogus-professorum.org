@@ -105,7 +105,7 @@ List Professors with simple navigation and search
 				$.each( _this.browse[_this.selection]["classes"], function(k,classUri) {
 					var label = classUri.split("/").reverse()[0];;
 					if ( _this.model.length == 1 ) {
-						$listContainer.append( '<li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-class-uri="' + classUri + '">' + label + '</a></li>' );
+						$listContainer.append( '<li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-class-uri="' + classUri + '" data-model-uri="'+_this.model[0]+'">' + label + '</a></li>' );
 					} else {
 						$.each( _this.model, function(k,model) {
 							var thisMLabel = model.replace(/\/$/, '').split("/").reverse()[0];
