@@ -41,6 +41,9 @@ store.virtuoso.password    = "dba"
 store.virtuoso.search_max_length_for_bifcontains = "4"
 ;store.virtuoso.use_persistent_connection = true
 
+;;; Dissalow login as superadmin dba
+ac.allowDbUser = false
+
 ;;;;
 ;; ARC2 backend specific options
 ;;
