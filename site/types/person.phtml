@@ -117,7 +117,7 @@ foreach ($periodsClasses as $periodClass) {
 	} ORDER BY ASC(?date) ASC(?from)';
 	$periodObject = $this->querylist($periodQuery, 'local/items/periodOfLife.phtml', array('cpd' => $this->namespaces["cpd"]));
 	if ( $periodObject != "" ) {
-		$periodsObjects[] = $periodObject;
+		$periodsObjects[] = array( "key" => $periodClass, "content" => $periodObject );
 	}
 }
 /*
@@ -201,17 +201,17 @@ if ( count( $periodsObjects ) > 1 ) { ?>
 	<?php foreach ($periodsObjects as $key => $periodObject) { ?>
 		<div class="period-of-life period">
 
-			<?php $classTypeof = $prefixes . 'SELECT *
+			<?php 
+			$classTypeof = $prefixes . 'SELECT *
 			WHERE {
-
-				<http://catalogus-professorum.org/cpd/'.$periodsClasses[$key].'> rdfs:label ?resourceUri .
+				<http://catalogus-professorum.org/cpd/'.$periodObject["key"].'> rdfs:label ?resourceUri .
 				FILTER (lang(?resourceUri) = "de")
 			}';
 			$classTypeof = $this->querylist( $classTypeof, 'local/items/plain.phtml'); ?>
 
-			<h4><?php echo $classTypeof; ?></h4>			
+			<h4><?php echo $classTypeof; ?></h4>
 			<table class="table">
-				<?php echo $periodObject; ?>
+				<?php echo $periodObject["content"]; ?>
 			</table>
 		</div>
 	<?php 
