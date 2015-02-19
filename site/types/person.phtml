@@ -7,6 +7,17 @@ PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> ';
 
 /*
+Forenames
+*/
+$forenamesQuery = $prefixes . 'SELECT *
+WHERE {
+	<' . $this->resourceUri . '> cpd:hasName ?resourceUri .
+	OPTIONAL { ?resourceUri cpd:forenamePosition ?date . }
+	OPTIONAL { ?resourceUri cpd:isFirstName ?date . }
+} ORDER BY ?forenamePosition';
+$forenames = $this->querylist( $forenamesQuery, 'local/items/resource.phtml' );
+
+/*
 Birth & Death
 */
 $birthDeathQuery = $prefixes . 'SELECT *
@@ -84,6 +95,32 @@ foreach ($family as $k) { $familyLength += strlen($k); }
 /*
 Periods of Life ()without Birth,Death,Family
 */
+$periodsObjects = array();
+$periodsClasses = array( "Study", "GeneralPeriod", "Qualification", "Career", "Office", "Membership", "Honour" );
+foreach ($periodsClasses as $periodClass) {
+	$periodQuery = $prefixes . 'SELECT *
+	WHERE {
+		<' . $this->resourceUri . '> cpd:hasPeriod ?resourceUri .
+		?resourceUri rdf:type ?classTypeof .
+		?resourceUri rdf:type cpd:'.$periodClass.' .
+		OPTIONAL { ?resourceUri cpd:periodPlace ?periodPlace . }	
+		OPTIONAL { ?resourceUri cpd:date ?date . }
+		OPTIONAL { ?resourceUri cpd:from ?from . }
+		OPTIONAL { ?resourceUri cpd:to ?to . }
+		OPTIONAL { ?resourceUri cpd:periodNote ?periodNote . }
+		OPTIONAL { 
+			?resourceUri cpd:periodDocument ?periodDocument . 
+			OPTIONAL {
+				?periodDocument rdfs:label ?periodDocumentLabel .
+			}
+		}
+	} ORDER BY ASC(?date) ASC(?from)';
+	$periodObject = $this->querylist($periodQuery, 'local/items/periodOfLife.phtml', array('cpd' => $this->namespaces["cpd"]));
+	if ( $periodObject != "" ) {
+		$periodsObjects[] = $periodObject;
+	}
+}
+/*
 $periodQuery = $prefixes . 'SELECT *
 WHERE {
 	<' . $this->resourceUri . '> cpd:hasPeriod ?resourceUri .
@@ -100,15 +137,20 @@ WHERE {
 		}
 	}
 	FILTER ( ?classTypeof != cpd:Birth && ?classTypeof != cpd:Death && ?classTypeof != cpd:Family )
-} ORDER BY ASC(?date) ASC(?from)';
+} ORDER BY ?classTypeof ASC(?date) ASC(?from)';
 	//FILTER NOT EXISTS {  ?resourceUri rdf:type cpd:Birth . }
 	//FILTER NOT EXISTS {  ?resourceUri rdf:type cpd:Death .  }
 	//FILTER NOT EXISTS {  ?resourceUri rdf:type cpd:Family .  }
 	//OPTIONAL { ?resourceUri cpd:periodBody ?periodBody . }
 $periodObject = $this->querylist($periodQuery, 'local/items/periodOfLife.phtml', array('cpd' => $this->namespaces["cpd"]));
+*/
 ?>
 
 <h2 class=""><?php echo $this->title ?></h2>
+
+<?php if ( $forenames != "" ) { ?>
+	<p>Vornamen: <?php echo $forenames; ?></p>
+<?php } ?>
 
 <?php $denomination = $this->literal(array('property' => $this->namespaces["cpd"] . 'denomination'));
 if ( $denomination != "" ) { ?>
@@ -132,22 +174,49 @@ if ( $alternativeWritingOfSurname != "" ) { ?>
 		<h3 class="">Familie</h3>
 		<?php // $this->_('family') ?>
 		<?php
-		echo !empty($family["parents"]) ? "Eltern " . $family["parents"] : "";
-		echo !empty($family["siblings"]) ? "Geschwister " . $family["siblings"] : "";
-		echo !empty($family["spouse"]) ? "Partner " . $family["spouse"] : "";
-		echo !empty($family["childs"]) ? "Kinder " . $family["childs"] : "";
+		echo !empty($family["parents"]) ? "<h4>Eltern</h4>" . $family["parents"] : "";
+		echo !empty($family["siblings"]) ? "<h4>Geschwister</h4>" . $family["siblings"] : "";
+		echo !empty($family["spouse"]) ? "<h4>Partner</h4>" . $family["spouse"] : "";
+		echo !empty($family["childs"]) ? "<h4>Kinder</h4>" . $family["childs"] : "";
 		?>
 	</div>
 <?php } ?>
 
-<?php if ( $periodObject != "" ) { ?>
+<?php 
+/*
+if ( $periodObject != "" ) { ?>
 	<div class="period-of-life periods">
 		<h3 class="">Lebenslauf</h3>
 		<table class="table">
 			<?php echo $periodObject; ?>
 		</table>
 	</div>
-<?php } ?>
+<?php } 
+*/
+?>
+
+<?php
+if ( count( $periodsObjects ) > 1 ) { ?>
+	<h3 class="">Lebenslauf</h3>
+	<?php foreach ($periodsObjects as $key => $periodObject) { ?>
+		<div class="period-of-life period">
+
+			<?php $classTypeof = $prefixes . 'SELECT *
+			WHERE {
+
+				<http://catalogus-professorum.org/cpd/'.$periodsClasses[$key].'> rdfs:label ?resourceUri .
+				FILTER (lang(?resourceUri) = "de")
+			}';
+			$classTypeof = $this->querylist( $classTypeof, 'local/items/plain.phtml'); ?>
+
+			<h4><?php echo $classTypeof; ?></h4>			
+			<table class="table">
+				<?php echo $periodObject; ?>
+			</table>
+		</div>
+	<?php 
+	}
+} ?>
 
 <?php
 $furtherProperties = array(

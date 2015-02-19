@@ -51,6 +51,10 @@ h1 {
     //padding-left: 40px;
 }
 
+.period-of-life.period td:first-child {
+    width: 15%;
+}
+
 .footer {
     background: none repeat scroll 0% 0% #EBD9BE;
     //position: absolute;

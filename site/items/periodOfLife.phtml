@@ -34,7 +34,7 @@ if ( $typeof == "Birth" || $typeof == "Death" ) { // Birth or Death
 
 	$date = "";
 	$content = "<tr><td>";
-
+	/*
 	$classTypeof = 'SELECT *
 	WHERE {
 		<' . $this->classTypeof . '> <http://www.w3.org/2000/01/rdf-schema#label> ?resourceUri .
@@ -44,6 +44,7 @@ if ( $typeof == "Birth" || $typeof == "Death" ) { // Birth or Death
 	//$title .= ' <small>('.$this->_($typeof).')</small>';
 	$content .= ' <small>'.$classTypeof.'</small>';
 	$content .= "</td><td>";
+	*/
 	
 	if ( isset($this->date) && ! empty($this->date) ) {
 		$date .= $this->date;
