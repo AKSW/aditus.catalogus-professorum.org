@@ -1,0 +1,19 @@
+<form base="http://aditus.catalogus-professorum.org/" prefix="cpd http://catalogus-professorum.org/cpd/ cpl http://aditus.catalogus-professorum.org/lipsiensium/ rdfs http://www.w3.org/2000/01/rdf-schema#">
+  <legend>Professor</legend>
+  <div typeof="cpd:Professor" resource="cpl:professor/{name}">
+    <input name="name" type="hidden" value="{cpd:firstName}_{cpd:surname}" />    
+
+    <input name="rdfs:label" type="literal" hidden datatype="xsd:string" value="{cpd:fullAcademicalTitle} {cpd:firstName} {cpd:surname}" required readonly />
+
+    <label>Akademischer Titel</label>
+    <input name="cpd:fullAcademicalTitle" type="literal" datatype="xsd:string" placeholder="Bsp: Prof. Dr." />    
+
+    <label>Name</label>
+    <input name="cpd:firstName" type="literal" datatype="xsd:string" help="Nur der Rufname" />
+
+    <label>Nachname</label>
+    <input name="cpd:surname" type="literal" datatype="xsd:string" required />
+
+  </div> 
+
+</form> 
