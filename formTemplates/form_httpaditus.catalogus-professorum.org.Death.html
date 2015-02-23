@@ -1,7 +1,7 @@
 <form base="http://aditus.catalogus-professorum.org/" prefix="cpd http://catalogus-professorum.org/cpd/ cpl http://aditus.catalogus-professorum.org/lipsiensium/ rdfs http://www.w3.org/2000/01/rdf-schema#">
   <legend>Tod</legend>
   <div typeof="cpd:Death" resource="cpl:death/{name}">
-    <input name="rdfs:label" type="literal" hidden value="Tod {name} {cpd:date} in {(BASE)cpd:periodPlace}" required />
+    <input name="rdfs:label" type="literal" value="Tod {name} {cpd:date} in {(BASE)cpd:periodPlace}" required />
 
     <label>Datum</label>
     <input name="cpd:date" type="literal" datatype="xsd:date" placeholder="JJJJ-MM-TT" />

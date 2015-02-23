@@ -45,16 +45,16 @@
     <label>Religion</label>
     <input name="cpd:denomination" type="literal" datatype="xsd:string" placeholder="röm.-kath. / ev.-luth." help="Wenn unbekannt keine Angabe." />
 
-    <label>Eltern & Geschwister</label>
-    <input name="cpd:hasPeriod" type="resource" external additional ondeletecascade
+    <label>Eltern &amp; Geschwister</label>
+    <input name="cpd:hasPeriod" type="resource" placeholder="Familie hier suchen oder neue erstellen" external additional ondeletecascade
       typeof="cpd:ParentFamily" subform="ParentFamily" arguments='{"familyName":"{cpd:surname}", "classUri":"{rdform-classUri}"}' multiple
       editaftercomplete autocomplete query-endpoint="http://aditus.catalogus-professorum.org/sparql"
       query-apitype="sparql" query-datatype="json"
       query="SELECT DISTINCT * WHERE { ?item rdf:type <http://catalogus-professorum.org/cpd/Family> . ?item rdfs:label ?label . FILTER regex(?label,%s,'i')} ORDER BY ?label LIMIT 20"
     />
 
-    <label>Partner & Kinder</label>
-    <input name="cpd:hasPeriod" type="resource" external additional ondeletecascade
+    <label>Partner &amp; Kinder</label>
+    <input name="cpd:hasPeriod" type="resource" placeholder="Familie hier suchen oder neue erstellen" external additional ondeletecascade
       typeof="cpd:Family" subform="Family" arguments='{"familyName":"{cpd:surname}","classUri":"{rdform-classUri}"}' multiple
       editaftercomplete autocomplete query-endpoint="http://aditus.catalogus-professorum.org/sparql"
       query-apitype="sparql" query-datatype="json"

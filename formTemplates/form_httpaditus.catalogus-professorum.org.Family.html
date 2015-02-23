@@ -1,18 +1,11 @@
 <form base="http://aditus.catalogus-professorum.org/" prefix="cpd http://catalogus-professorum.org/cpd/ cpl http://aditus.catalogus-professorum.org/lipsiensium/ rdfs http://www.w3.org/2000/01/rdf-schema#">
-  <legend>Partner & Kinder</legend>
+  <legend>Partner &amp; Kinder</legend>
   <div typeof="cpd:Family" resource="cpl:family/{rdfs:label}" multiple>    
 
     <label>Familiebezeichnung</label>
-    <input name="rdfs:label" type="literal" datatype="xsd:string" value="{familyName}" required />
+    <input name="rdfs:label" type="literal" datatype="xsd:string" value="{familyName} (Partner &amp; Kinder)" required />
 
-    <!--<label>Mutter / Vater</label>
-    <input name="cpd:familyParent" type="resource" external multiple 
-      subform="Person"
-      autocomplete query-endpoint="http://aditus.catalogus-professorum.org/sparql"
-      query-apitype="sparql" query-datatype="json"
-      query="SELECT DISTINCT * WHERE { { ?item rdf:type <http://catalogus-professorum.org/cpd/Person> } UNION { ?item rdf:type <http://catalogus-professorum.org/cpd/Professor> } ?item rdfs:label ?label . FILTER regex(?label,%s,'i')} ORDER BY ?label LIMIT 20"
-    />-->
-
+    <!-- on create this family the person itself should be added as a parent -->
     <input name="cpd:familyParent" type="resource" external value="{classUri}" readonly hidden />
 
     <label>Partner / Partnerin</label>
@@ -30,8 +23,6 @@
       query-apitype="sparql" query-datatype="json"
       query="SELECT DISTINCT * WHERE { ?item <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?body . ?item <http://www.w3.org/2000/01/rdf-schema#label> ?label . FILTER ( ( ?body = <http://catalogus-professorum.org/cpd/Person> || ?body = <http://catalogus-professorum.org/cpd/Professor> ) && regex(?label,%s,'i') ) } ORDER BY ?label LIMIT 20"
     />
-
-    
     
     <label>Anmerkung</label>
     <input name="cpd:periodNote" textarea type="literal" datatype="xsd:string" additional />
