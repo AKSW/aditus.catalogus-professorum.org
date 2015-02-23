@@ -14,7 +14,8 @@ $owApp = OntoWiki::getInstance();
 
 // this is the standard template data
 $templateData = $this->templateData;
-$title = $this->literal(array('uri' => $this->modelUri, 'property' => EF_RDFS_NS . 'label', 'plain' => true));
+//$title = $this->literal(array('uri' => $this->modelUri, 'property' => EF_RDFS_NS . 'label', 'plain' => true));
+$title = "Professorenkatalog der Universität Leipzig | catalogus professorum lipsiensium";
 // get the type of the class for rdform template
 $classTypeof = basename($this->literal(array('property' => EF_RDF_NS . 'type', 'plain' => true)));
 ?><!doctype html>
@@ -139,7 +140,10 @@ $classTypeof = basename($this->literal(array('property' => EF_RDF_NS . 'type', '
 		<div class="content">
 		<?php
 		// render content
-		echo $this->renderx($this->templateData); 
+		//echo $this->renderx($this->templateData); 
+		var_dump($classTypeof);
+		var_dump( array_keys($this->templateData) );
+		echo $this->renderx();
 		?>
 		</div>
 		
