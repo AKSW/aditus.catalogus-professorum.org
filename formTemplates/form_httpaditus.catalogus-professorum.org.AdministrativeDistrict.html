@@ -5,7 +5,7 @@
     <input name="rdfs:label" type="literal" required />
     
     <label>liegt in (Land)</label>
-    <input name="shv:isLocatedIn" type="resource" external typeof="shv:Country" additional
+    <input name="shv:isLocatedIn" type="resource" external additional subform="Country"
       autocomplete query-endpoint="http://aditus.catalogus-professorum.org/sparql"
       query-apitype="sparql" query-datatype="json"
       query="SELECT DISTINCT * WHERE {?item <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://ns.aksw.org/spatialHierarchy/Country>;<http://www.w3.org/2000/01/rdf-schema#label> ?label. FILTER regex(?label,%s,'i')} ORDER BY ?label LIMIT 20"

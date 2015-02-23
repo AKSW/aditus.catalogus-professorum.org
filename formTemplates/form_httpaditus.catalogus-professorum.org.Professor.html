@@ -1,9 +1,7 @@
 <form base="http://aditus.catalogus-professorum.org/" prefix="cpd http://catalogus-professorum.org/cpd/ cpl http://aditus.catalogus-professorum.org/lipsiensium/ rdfs http://www.w3.org/2000/01/rdf-schema#">
   <legend>Professor</legend>
   <div typeof="cpd:Professor" resource="cpl:professor/{name}">
-    <!--<input name="forenames" type="hidden" />
-    <input name="name" type="hidden" value="{forenames}_{cpd:surname}" />-->
-    <input name="name" type="hidden" value="{cpd:firstName}_{cpd:surname}" />    
+    <input name="name" type="hidden" value="{cpd:firstName} {cpd:surname}" />    
 
     <label>reviewed</label>
     <input type="literal" boolean name="cpd:reviewed" datatype="xsd:boolean" checked help="Datensatz für Wissenschaftler zugänglich." />
@@ -30,25 +28,25 @@
     <input name="cpd:alternativeWritingOfSurname" type="literal" datatype="xsd:string" help="Geburtsname, Pseudonym oder alternative Namensschreibweisen" />
 
     <label>Vornamen</label>
-    <input name="cpd:hasName" type="resource" external multiple 
-      typeof="cpd:Forename" subform="Forename" arguments='{"name":"{name}"}' promptlysubform help="Alle Vornamen, inkl Rufname"
+    <input name="cpd:hasName" type="resource" external multiple ondeletecascade
+      typeof="cpd:Forename" subform="Forename" arguments='{"name":"{name}"}' help="Alle Vornamen, inkl Rufname"
     />    
     
     <label>Geburt</label>
-    <input name="cpd:hasPeriod" type="resource" external 
+    <input name="cpd:hasPeriod" type="resource" external ondeletecascade
       typeof="cpd:Birth" subform="Birth" arguments='{"name":"{name}"}'
     />
 
     <label>Tod</label>
-    <input name="cpd:hasPeriod" type="resource" external additional
-      typeof="cpd:Death" subform="Death" arguments='{"name":"{name}"}' promptlysubform
+    <input name="cpd:hasPeriod" type="resource" external additional ondeletecascade
+      typeof="cpd:Death" subform="Death" arguments='{"name":"{name}"}'
     />
 
     <label>Religion</label>
     <input name="cpd:denomination" type="literal" datatype="xsd:string" placeholder="röm.-kath. / ev.-luth." help="Wenn unbekannt keine Angabe." />
 
     <label>Eltern & Geschwister</label>
-    <input name="cpd:hasPeriod" type="resource" external additional onDeleteCascade
+    <input name="cpd:hasPeriod" type="resource" external additional ondeletecascade
       typeof="cpd:ParentFamily" subform="ParentFamily" arguments='{"familyName":"{cpd:surname}", "classUri":"{rdform-classUri}"}' multiple
       editaftercomplete autocomplete query-endpoint="http://aditus.catalogus-professorum.org/sparql"
       query-apitype="sparql" query-datatype="json"
@@ -56,7 +54,7 @@
     />
 
     <label>Partner & Kinder</label>
-    <input name="cpd:hasPeriod" type="resource" external additional
+    <input name="cpd:hasPeriod" type="resource" external additional ondeletecascade
       typeof="cpd:Family" subform="Family" arguments='{"familyName":"{cpd:surname}","classUri":"{rdform-classUri}"}' multiple
       editaftercomplete autocomplete query-endpoint="http://aditus.catalogus-professorum.org/sparql"
       query-apitype="sparql" query-datatype="json"
@@ -64,12 +62,12 @@
     />
     
     <label>Schule / Ausbildung / Studium</label>
-    <input name="cpd:hasPeriod" type="resource" external typeof="cpd:Study" multiple additional
-      arguments='{"name":"{name}"}' subform="Study" promptlysubform help="Eingabe der schulischen, beruflichen und universitären Ausbildung. Abschluss mit Urkundendatum unter Qualifikationen."
+    <input name="cpd:hasPeriod" type="resource" external typeof="cpd:Study" multiple additional ondeletecascade
+      arguments='{"name":"{name}"}' subform="Study" help="Eingabe der schulischen, beruflichen und universitären Ausbildung. Abschluss mit Urkundendatum unter Qualifikationen."
     />
 
     <label>Anderer Lebensabschnitt</label>
-    <input name="cpd:hasPeriod" type="resource" external typeof="cpd:GeneralPeriod" multiple additional    
+    <input name="cpd:hasPeriod" type="resource" external typeof="cpd:GeneralPeriod" multiple additional ondeletecascade
       arguments='{"name":"{name}"}' subform="GeneralPeriod" help="Weitere Lebensabschnitte die weder zu Schule/Ausbildung/Studium oder als Karriereschritt zur Professur zu bezeichnen sind, wie z.B. Militärdienst, Reichsarbeitsdienst, Gefangenschaft"
     />
 
@@ -79,34 +77,34 @@
     />-->
 
     <label>Lebensabschnitt: Qualifikation</label>
-    <input name="cpd:hasPeriod" type="resource" external typeof="cpd:Qualification" multiple additional    
+    <input name="cpd:hasPeriod" type="resource" external typeof="cpd:Qualification" multiple additional ondeletecascade
       arguments='{"name":"{name}"}' subform="Qualification" help="Akademische Karriere (Diplom-Hauptprüfung, Staatsexamen, Dissertation, Habilitation, Facultas docendi) mit Thema, Ort, Jahr Umwidmung Dissertation B in Habilitation.
 Gemeinschaftspromotionen unter Anmerkungen notieren."
     />
 
     <label>Lehrtätigkeit, Karriere</label>
-    <input name="cpd:hasPeriod" type="resource" external typeof="cpd:Career" multiple additional    
+    <input name="cpd:hasPeriod" type="resource" external typeof="cpd:Career" multiple additional ondeletecascade
       arguments='{"name":"{name}"}' subform="Career" help="Mehrfacherfassung bei Inhabern von Professuren über verschiedene Epochen, d.h. vor 1968/69, 1969-1990, 1990-1993 u. nach 1993."
     />
 
     <label>Lebensabschnitt: Universitsämter</label>
-    <input name="cpd:hasPeriod" type="resource" external typeof="cpd:Office" multiple additional    
+    <input name="cpd:hasPeriod" type="resource" external typeof="cpd:Office" multiple additional ondeletecascade
       arguments='{"name":"{name}"}' subform="Office" help="Lehrstuhlinhaber /Ämter in Fakultäten, Sektionen oder Bereichen wie Direktoren und deren Stellvertreter, Sekretäre der Sektionen, WB- oder FB-Leiter, Klinikleiter etc. incl. Vorsitz in gesellschaftlichen Organisationen innerhalb der Universität."
     />
 
     <label>Mitgliedschaften</label>
-    <input name="cpd:hasPeriod" type="resource" external typeof="cpd:Membership" multiple additional    
+    <input name="cpd:hasPeriod" type="resource" external typeof="cpd:Membership" multiple additional ondeletecascade
       arguments='{"name":"{name}"}' subform="Membership" help="Universitätsämter oder Leitungsfunktionen außerhalb der Universität Leipzig.
 Mitgliedschaften in wissenschaftlichen Gesellschaften, Akademien, Beiräten, Herausgeberschaften etc. sowie Parteien u. Organisationen."
     />
 
     <label>Ehrungen</label>
-    <input name="cpd:hasPeriod" type="resource" external typeof="cpd:Honour" multiple additional    
+    <input name="cpd:hasPeriod" type="resource" external typeof="cpd:Honour" multiple additional ondeletecascade
       arguments='{"name":"{name}"}' subform="Honour" help="Z. B. Ehrenpromotionen, Ernennungen zum Studienrat, Medizinalrat, Aufnahme in wiss. Akademien sowie staatliche Auszeichnungen. (Anm.: Oberarzt gilt analog Oberassistent als beruflicher Karriereschritt)."
     />
 
     <label>Veröffentlichungen / Publikationen</label>
-    <input name="cpd:published" type="resource" external typeof="cpd:Publication" multiple    
+    <input name="cpd:published" type="resource" external typeof="cpd:Publication" multiple ondeletecascade
       arguments='{"name":"{name}"}' subform="Publication" 
     />    
 

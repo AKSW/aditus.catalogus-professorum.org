@@ -1,13 +1,11 @@
 <form base="http://aditus.catalogus-professorum.org/" prefix="cpd http://catalogus-professorum.org/cpd/ cpl http://aditus.catalogus-professorum.org/lipsiensium/ rdfs http://www.w3.org/2000/01/rdf-schema#">
   <legend>Person</legend>
-  <div typeof="cpd:Person" resource="cpl:person/{name}" typeof-select='{"cpd:Person":"Person", "cpd:Professor": "Professor"}'>
-    <input name="name" type="hidden" value="{cpd:name}_{cpd:surname}" />
-
+  <div typeof="cpd:Person" resource="cpl:person/{rdfs:label}" typeof-select='{"cpd:Person":"Person", "cpd:Professor": "Professor"}'>
     <label>Bezeichnung</label>
-    <input name="rdfs:label" type="literal" datatype="xsd:string" value="{cpd:name} {cpd:surname}" hidden required readonly />
+    <input name="rdfs:label" type="literal" datatype="xsd:string" value="{cpd:firstName} {cpd:surname}" hidden required readonly />
 
     <label>Vornamen</label>
-    <input name="cpd:name" type="literal" datatype="xsd:string" />
+    <input name="cpd:firstName" type="literal" datatype="xsd:string" />
 
     <label>Nachname</label>
     <input name="cpd:surname" type="literal" datatype="xsd:string" required />
