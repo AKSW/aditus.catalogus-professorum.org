@@ -17,7 +17,7 @@ $templateData = $this->templateData;
 //$title = $this->literal(array('uri' => $this->modelUri, 'property' => EF_RDFS_NS . 'label', 'plain' => true));
 $title = "Professorenkatalog der Universität Leipzig | catalogus professorum lipsiensium";
 // get the type of the class for rdform template
-$classTypeof = basename($this->literal(array('property' => EF_RDF_NS . 'type', 'plain' => true)));
+$classTypeof = $this->literal(array('property' => EF_RDF_NS . 'type', 'plain' => true));
 ?><!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xmlns:dc="http://purl.org/dc/terms/" xmlns:foaf="http://xmlns.com/foaf/0.1/">
 <head>
@@ -129,7 +129,7 @@ $classTypeof = basename($this->literal(array('property' => EF_RDF_NS . 'type', '
 
 			<div class="menu pull-right">
 				<a href="<?= $this->Url(array('uri' => $this->resourceUri, 'stayOnSite' => false)) ?>"><?= $this->_('backend') ?></a>
-				<?php  if ( $classTypeof != "SiteDocument" ) : ?>
+				<?php  if ( $classTypeof != "http://xmlns.com/foaf/0.1/Document" ) : ?>
 					| <a class="rdform-edit-btn" href="#"><?= $this->_('edit') ?></a> | <a class="rdform-new-btn" href="#"><?= $this->_('new') ?></a>
 				<?php endif; ?>
 			</div>
@@ -140,7 +140,15 @@ $classTypeof = basename($this->literal(array('property' => EF_RDF_NS . 'type', '
 		<div class="content">
 		<?php
 		// render content
-		echo $this->renderx($this->templateData); 
+		/*
+		$siteTemplate = $this->query(array('where' => '<' . $classTypeof . '> <http://ns.ontowiki.net/SysOnt/Site/classTemplate> ?resourceUri', 'template' => 'plain'));
+		if ( ! empty($siteTemplate) ) {
+			echo $this->renderx($this->templateData); 	
+		} else {
+			echo $this->partial('local/types/default.phtml', $this );
+		}
+		*/
+		echo $this->renderx($this->templateData);
 		?>
 		</div>
 		
@@ -174,7 +182,7 @@ $classTypeof = basename($this->literal(array('property' => EF_RDF_NS . 'type', '
 	<script language="JavaScript">
 		var urlBase = '<?php echo $this->urlBase ?>';
 		var modelIri = '<?php echo $this->modelUri ?>';
-		var resourceTemplate = '<?php echo $classTypeof ?>';
+		var resourceTemplate = '<?php echo basename($classTypeof) ?>';
 		var resourceUri = '<?php echo $this->resourceUri ?>';
 	</script>
 
@@ -184,7 +192,7 @@ $classTypeof = basename($this->literal(array('property' => EF_RDF_NS . 'type', '
 
 	<input type="hidden" id="urlBase" value="<?php echo $this->urlBase ?>" />
 	<input type="hidden" id="modelIri" value="<?php echo $this->modelUri ?>" />
-	<input type="hidden" id="resourceTemplate" value="<?php echo $classTypeof ?>" />	
+	<input type="hidden" id="resourceTemplate" value="<?php echo basename($classTypeof) ?>" />	
 
 </body>
 </html>
