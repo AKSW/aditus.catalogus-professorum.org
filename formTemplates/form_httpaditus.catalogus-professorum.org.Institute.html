@@ -6,14 +6,14 @@
     <input name="rdfs:label" type="literal" datatype="xsd:string" placeholder="Bezeichnung" required />
 
     <label>Ort</label>
-    <input name="cpd:bodyPlace" type="resource" external subform="CityPlain"
+    <input name="cpd:bodyPlace" type="resource" external subform="CityPlain" placeholder="Ort hier suchen oder neu erstellen"
       autocomplete query-endpoint="http://aditus.catalogus-professorum.org/sparql"
       query-apitype="sparql" query-datatype="json"
-      query="SELECT DISTINCT * WHERE {?item <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://ns.aksw.org/spatialHierarchy/City>;<http://www.w3.org/2000/01/rdf-schema#label> ?label. FILTER regex(?label,%s,'i')} ORDER BY ?label LIMIT 20"
+      query="SELECT DISTINCT ?item ?label ?districtLabel ?countryLabel WHERE {?item rdf:type <http://ns.aksw.org/spatialHierarchy/City>;rdfs:label ?label. OPTIONAL { ?item <http://ns.aksw.org/spatialHierarchy/isLocatedIn> ?isLocatedInC . ?isLocatedInC rdf:type <http://ns.aksw.org/spatialHierarchy/Country> . ?isLocatedInC rdfs:label ?countryLabel } OPTIONAL { ?item <http://ns.aksw.org/spatialHierarchy/isLocatedIn> ?isLocatedInD . ?isLocatedInD rdf:type <http://ns.aksw.org/spatialHierarchy/AdministrativeDistrict> . ?isLocatedInD rdfs:label ?districtLabel } FILTER regex(?label,%s,'i')} ORDER BY ?label LIMIT 20"
     />
 
     <label>ist Teil von</label>
-    <input name="cpd:isPartOf" type="resource" external additional
+    <input name="cpd:isPartOf" type="resource" external additional placeholder="Körperschaft hier suchen oder neue erstellen"
       autocomplete query-endpoint="http://aditus.catalogus-professorum.org/sparql"
       query-apitype="sparql" query-datatype="json"
       query="SELECT DISTINCT * WHERE { ?item <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?body . ?item <http://www.w3.org/2000/01/rdf-schema#label> ?label . FILTER ( ( ?body = <http://catalogus-professorum.org/cpd/Body> || ?body = <http://catalogus-professorum.org/cpd/Institution> || ?body = <http://catalogus-professorum.org/cpd/Institute> || ?body = <http://catalogus-professorum.org/cpd/Academy> || ?body = <http://catalogus-professorum.org/cpd/Department> || ?body = <http://catalogus-professorum.org/cpd/Faculty> ) && regex(?label,%s,'i') ) } ORDER BY ?label LIMIT 20"    

@@ -7,7 +7,7 @@
     <input type="literal" textarea name="rdfs:label" datatype="xsd:string" required />
     
     <label>Hochschule</label>
-    <input name="cpd:periodBody" type="resource" external
+    <input name="cpd:periodBody" type="resource" external placeholder="Hochschule hier suchen oder neu erstellen"
       subform="Academy" typeof="cpd:Academy"
       autocomplete query-endpoint="http://aditus.catalogus-professorum.org/sparql"
       query-apitype="sparql" query-datatype="json"
@@ -15,7 +15,7 @@
     />
 
     <label>Fakultät / Sektion</label>
-    <input name="cpd:periodBody" type="resource" external additional
+    <input name="cpd:periodBody" type="resource" external additional placeholder="Fakultät/Sektion hier suchen oder neu erstellen"
       subform="Faculty" typeof="cpd:Faculty"
       autocomplete query-endpoint="http://aditus.catalogus-professorum.org/sparql"
       query-apitype="sparql" query-datatype="json"
@@ -23,7 +23,7 @@
     />
 
     <label>Institut / Klinik / WB, WG</label>
-    <input name="cpd:periodBody" type="resource" external multiple additional 
+    <input name="cpd:periodBody" type="resource" external multiple additional placeholder="Institut/Klinik/WB hier suchen oder neu erstellen"
       subform="Institute" typeof="cpd:Institute"
       autocomplete query-endpoint="http://aditus.catalogus-professorum.org/sparql"
       query-apitype="sparql" query-datatype="json"
@@ -31,7 +31,7 @@
     />
 
     <label>Lehrstuhl / Abteilung / FB</label>
-    <input name="cpd:periodBody" type="resource" external multiple additional 
+    <input name="cpd:periodBody" type="resource" external multiple additional placeholder="Lehrstuhl/Abteilung hier suchen oder neu erstellen"
       subform="Department" typeof="cpd:Department"
       autocomplete query-endpoint="http://aditus.catalogus-professorum.org/sparql"
       query-apitype="sparql" query-datatype="json"
