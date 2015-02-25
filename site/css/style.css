@@ -122,6 +122,13 @@ h1 {
     width: 100%;
 }
 
+.rdform-edit-class-resource {
+    display: none !important;
+}
+.rdform-class-group small {
+    margin-left: 5px;
+}
+
 
 .close-rdform-btn {
     margin-right: -45px;
