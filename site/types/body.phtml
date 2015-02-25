@@ -3,7 +3,7 @@ $prefixes = '
 PREFIX cpd: <' . $this->namespaces["cpd"] . '>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> ';
 
-$personsQuery = $prefixes . 'SELECT *
+$personsQuery = $prefixes . 'SELECT DISTINCT ?resourceUri
 WHERE {
 	?resourceUri <' . $this->namespaces["cpd"] . 'hasPeriod> ?period .
 	?period <' . $this->namespaces["cpd"] . 'periodBody> <'.$this->resourceUri.'> .
